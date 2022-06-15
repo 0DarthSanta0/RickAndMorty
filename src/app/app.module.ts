@@ -5,19 +5,28 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from "@angular/forms";
 import { AutoCompleteModule } from "primeng/autocomplete";
-
-import { AccordionModule } from 'primeng/accordion';
-import { MenuItem } from 'primeng/api';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { StoreModule } from '@ngrx/store';
+import { HttpClientModule } from "@angular/common/http";
+import { MainPageComponent } from './main-page/main-page.component';
+import { generalReducer } from "./shared/store/api.reducers";
+import { EffectsModule } from "@ngrx/effects";
+import { GeneralEffects } from "./shared/store/api.effects";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainPageComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     AutoCompleteModule,
+    BrowserAnimationsModule,
+    StoreModule.forRoot({app: generalReducer}),
+    EffectsModule.forRoot([GeneralEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent]

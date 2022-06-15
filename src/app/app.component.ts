@@ -1,17 +1,12 @@
 import { Component } from '@angular/core';
+import { HttpService } from "./services/http/http.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'RickAndMorty';
-  text: string = '';
 
-  results: string[] = [];
-
-  search($event: any) {
-    this.results = ['a', 'aa', 'bb'];
-  }
 }

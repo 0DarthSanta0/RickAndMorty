@@ -1,0 +1,33 @@
+:host {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.center-element {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bar {
+  flex: 2.5;
+  height: 100px;
+  width: 100px;
+}
+
+::ng-deep p-autocomplete input{
+  width: 20rem;
+  height: 2rem;
+  border-radius: 2rem;
+  padding: 0 1rem;
+}
+
+.logo-div {
+  font-size: 2rem;
+  font-family: "Berlin Sans FB";
+  padding: 2rem 0;
+}
