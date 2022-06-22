@@ -10,7 +10,7 @@ export const initialState: GeneralState = {
 
 export const generalReducer = createReducer(
   initialState,
-  on(doSearchRequestSuccess, (state: GeneralState, {characters, locations, episodes,}) => {
+  on(doSearchRequestSuccess, (state: GeneralState, {characters, locations, episodes}) => {
     return {
       ...state,
       characters: characters,

@@ -1,12 +1,9 @@
-import { Character } from "./character.interface";
-import { Episode } from "./episode.interface";
-
-export interface Filter {
+export interface Filter<T> {
   info: {
     count: number | null,
     pages: number | null,
     next: string | null,
     prev: string | null,
   },
-  results: [],
+  results: T[],
 }
