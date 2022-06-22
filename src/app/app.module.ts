@@ -12,11 +12,19 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { generalReducer } from "./shared/store/api.reducers";
 import { EffectsModule } from "@ngrx/effects";
 import { GeneralEffects } from "./shared/store/api.effects";
+import { InfoPageComponent } from './info-page/info-page.component';
+import { RouterModule, Routes } from "@angular/router";
+
+const appRoutes: Routes = [
+  { path: '', component: MainPageComponent },
+  { path: 'info/:id', component: InfoPageComponent},
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainPageComponent
+    MainPageComponent,
+    InfoPageComponent
   ],
   imports: [
     HttpClientModule,
@@ -27,6 +35,7 @@ import { GeneralEffects } from "./shared/store/api.effects";
     BrowserAnimationsModule,
     StoreModule.forRoot({app: generalReducer}),
     EffectsModule.forRoot([GeneralEffects]),
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [],
   bootstrap: [AppComponent]
