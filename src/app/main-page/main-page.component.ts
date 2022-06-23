@@ -18,7 +18,7 @@ export class MainPageComponent implements OnInit{
   title = 'RickAndMorty';
   text: string = '';
 
-  results: string[] = [];
+  results: any = [];
 
   constructor(private httpService: HttpService, private store$: Store){
 
@@ -29,25 +29,49 @@ export class MainPageComponent implements OnInit{
   }
 
   search(event: any) {
+    let filteredGroups: any[] = [];
     this.store$.dispatch(doSearchRequest({url: event.query}));
     this.store$.select(selectCharacters).subscribe(data => {
-      const tempResult: string[] = [];
+      let tempResult: any[] = [];
       data.characters.forEach((item: Character) => {
-        if (item.name) {
-          tempResult.push(item.name);
+        if (item.name && item.id) {
+          tempResult.push({label: item.name, value: item.id});
         }
       });
+      if (data.characters.length) {
+        filteredGroups.push({
+          label: 'Characters',
+          value: 'ch',
+          items: tempResult,
+        });
+      }
+      tempResult = [];
       data.locations.forEach((item: Location) => {
-        if (item.name) {
-          tempResult.push(item.name);
+        if (item.name && item.id) {
+          tempResult.push({label: item.name, value: item.id});
         }
       });
+      if (data.locations.length) {
+        filteredGroups.push({
+          label: 'Location',
+          value: 'loc',
+          items: tempResult,
+        });
+      }
+      tempResult = [];
       data.episodes.forEach((item: Episode) => {
-        if (item.name) {
-          tempResult.push(item.name);
+        if (item.name && item.id) {
+          tempResult.push({label: item.name, value: item.id});
         }
       });
-      this.results = tempResult;
+      if (data.episodes.length) {
+        filteredGroups.push({
+          label: 'Episodes',
+          value: 'ep',
+          items: tempResult,
+        });
+      }
     });
+    this.results = filteredGroups;
   }
 }
