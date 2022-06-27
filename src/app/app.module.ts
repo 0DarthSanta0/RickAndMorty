@@ -12,19 +12,19 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { generalReducer } from "./shared/store/api.reducers";
 import { EffectsModule } from "@ngrx/effects";
 import { GeneralEffects } from "./shared/store/api.effects";
-import { InfoPageComponent } from './info-page/info-page.component';
 import { RouterModule, Routes } from "@angular/router";
+import { InfoCharacterPageComponent } from './info-character-page/info-character-page.component';
 
 const appRoutes: Routes = [
   { path: '', component: MainPageComponent },
-  { path: 'info/:id', component: InfoPageComponent},
+  { path: 'info/:id', component: InfoCharacterPageComponent},
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
-    InfoPageComponent
+    InfoCharacterPageComponent
   ],
   imports: [
     HttpClientModule,
