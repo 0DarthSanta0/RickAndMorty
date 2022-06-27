@@ -25,4 +25,16 @@ export class HttpService {
   public searchEpisode(nameFilter: string): Observable<Filter<Episode>> {
     return this.http.get<Filter<Episode>>(`https://rickandmortyapi.com/api/episode/?name=${nameFilter}`);
   }
+
+  public searchCharacterById(id: number): Observable<Character> {
+    return this.http.get<Character>(`https://rickandmortyapi.com/api/character/${id}`);
+  }
+
+  public searchLocationById(id: number): Observable<Location> {
+    return this.http.get<Location>(`https://rickandmortyapi.com/api/location/${id}`);
+  }
+
+  public searchEpisodeById(id: number): Observable<Episode> {
+    return this.http.get<Episode>(`https://rickandmortyapi.com/api/episode/${id}`);
+  }
 }

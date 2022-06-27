@@ -7,3 +7,4 @@ export interface SearchData {
   locations: Location[],
   episodes: Episode[],
 }
+
