@@ -12,29 +12,31 @@ import { Episode } from "../../shared/interfaces/episode.interface";
 
 export class HttpService {
 
+  private readonly BASE_URL: string = 'https://rickandmortyapi.com/api/';
+
   constructor(private http: HttpClient) { }
 
   public searchCharacter(nameFilter: string): Observable<Filter<Character>> {
-    return this.http.get<Filter<Character>>(`https://rickandmortyapi.com/api/character/?name=${nameFilter}`);
+    return this.http.get<Filter<Character>>(`${this.BASE_URL}character/?name=${nameFilter}`);
   }
 
   public searchLocation(nameFilter: string): Observable<Filter<Location>> {
-    return this.http.get<Filter<Location>>(`https://rickandmortyapi.com/api/location/?name=${nameFilter}`);
+    return this.http.get<Filter<Location>>(`${this.BASE_URL}location/?name=${nameFilter}`);
   }
 
   public searchEpisode(nameFilter: string): Observable<Filter<Episode>> {
-    return this.http.get<Filter<Episode>>(`https://rickandmortyapi.com/api/episode/?name=${nameFilter}`);
+    return this.http.get<Filter<Episode>>(`${this.BASE_URL}episode/?name=${nameFilter}`);
   }
 
   public searchCharacterById(id: number): Observable<Character> {
-    return this.http.get<Character>(`https://rickandmortyapi.com/api/character/${id}`);
+    return this.http.get<Character>(`${this.BASE_URL}character/${id}`);
   }
 
   public searchLocationById(id: number): Observable<Location> {
-    return this.http.get<Location>(`https://rickandmortyapi.com/api/location/${id}`);
+    return this.http.get<Location>(`${this.BASE_URL}location/${id}`);
   }
 
   public searchEpisodeById(id: number): Observable<Episode> {
-    return this.http.get<Episode>(`https://rickandmortyapi.com/api/episode/${id}`);
+    return this.http.get<Episode>(`${this.BASE_URL}episode/${id}`);
   }
 }

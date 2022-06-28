@@ -1,6 +1,7 @@
 <div class="logo-div">Rick And Morty</div>
 <div class="center-element">
-  <p-autoComplete [(ngModel)]="text" [group]="true" [suggestions]="results" (completeMethod)="search($event)" field="label">
+  <p-autoComplete [(ngModel)]="text" [group]="true" [suggestions]="results" (completeMethod)="search($event)"
+                  field="label" (onSelect)="select($event)" >
     <ng-template let-group pTemplate="group">
       <div class="flex align-items-center">
         <span>{{group.label}}</span>

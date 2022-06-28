@@ -1,9 +1,7 @@
-export interface Location {
-  id: number | null;
-  name: string | null;
+import { BaseEntity } from "./base.entity";
+
+export interface Location extends BaseEntity{
   type: string | null;
   dimension: string | null;
   residents: string[] | null;
-  url: string | null;
-  created: string | null;
 }
