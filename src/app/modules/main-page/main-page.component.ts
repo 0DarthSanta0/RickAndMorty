@@ -13,6 +13,8 @@ import { SearchData } from "../../shared/interfaces/search-data.interface";
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
 import { BaseEntity } from "../../shared/interfaces/base.entity";
+import { Router } from "@angular/router";
+import { SelectEvent } from "../../shared/interfaces/select.event";
 
 @Component({
   selector: 'app-main-page',
@@ -28,11 +30,12 @@ export class MainPageComponent implements OnInit{
 
   constructor(
     private httpService: HttpService,
-    private store$: Store) { }
+    private store$: Store,
+    private route: Router) { }
 
   public ngOnInit() { }
 
-  search(event: AutocompleteEvent): void {
+  public search(event: AutocompleteEvent): void {
     this.store$.dispatch(doSearchRequest({url: event.query}));
     this.store$.select(selectAll)
       .pipe(
@@ -45,6 +48,10 @@ export class MainPageComponent implements OnInit{
         }),
       )
       .subscribe((result: ResultsData[]) => this.results = result);
+  }
+
+  public select(event: SelectEvent): void {
+    this.route.navigate(['/details', event.value]).then();
   }
 
   private buildEntity<T extends BaseEntity>(key: SearchedEntities, data: T[]): ResultsData {
