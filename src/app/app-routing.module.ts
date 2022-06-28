@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainPageComponent } from "./modules/main-page/main-page.component";
-import { InfoCharacterPageComponent } from "./modules/details/info-character-page/info-character-page.component";
+import { DetailsModule } from "./modules/details/details.module";
 
 const appRoutes: Routes = [
   { path: '', component: MainPageComponent },
-  { path: 'info/:id', component: InfoCharacterPageComponent},
+  { path: 'details', loadChildren: () => import('./modules/details/details.module').then(m => m.DetailsModule)},
 ];
 
 @NgModule({

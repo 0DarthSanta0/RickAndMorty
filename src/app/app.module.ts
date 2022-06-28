@@ -13,13 +13,11 @@ import { generalReducer } from "./shared/store/api.reducers";
 import { EffectsModule } from "@ngrx/effects";
 import { GeneralEffects } from "./shared/store/api.effects";
 import { RouterModule, Routes } from "@angular/router";
-import { InfoCharacterPageComponent } from './modules/details/info-character-page/info-character-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
-    InfoCharacterPageComponent
   ],
   imports: [
     HttpClientModule,
