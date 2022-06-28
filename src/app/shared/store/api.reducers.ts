@@ -18,17 +18,15 @@ export const generalReducer = createReducer(
   on(doSearchRequestSuccess, (state: GeneralState, {characters, locations, episodes}) => {
     return {
       ...state,
-      characters: characters,
-      locations: locations,
-      episodes: episodes,
+      characters,
+      locations,
+      episodes,
     };
   }),
-  on(doSearchRequestFail, (state: GeneralState) => ({...state})),
   on(doSearchCharacterRequestSuccess, (state: GeneralState, {characters}) => {
     return {
       ...state,
-      characters: characters,
+      characters,
     }
   }),
-  on(doSearchCharacterRequestFail, (state: GeneralState) => ({...state})),
 )

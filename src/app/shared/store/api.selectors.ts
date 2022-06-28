@@ -12,5 +12,5 @@ export const selectAll = createSelector(createFeatureSelector('app'), (state: Ge
 });
 
 export const selectCharacter = (id: number) => createSelector(createFeatureSelector('app'), (state: GeneralState) : Character | undefined => {
-  return state.characters.find(item => item.id == id);
+  return state.characters.find(item => item.id === id);
 });
