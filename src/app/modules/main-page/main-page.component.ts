@@ -9,10 +9,10 @@ import { Location } from "../../shared/interfaces/location.interface";
 import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event";
 import { map } from "rxjs";
 import { ResultsData } from "../../shared/interfaces/results.data";
-import { SearchData } from "../../shared/interfaces/search-data.interface";
+import { SearchData } from "../../shared/interfaces/search.data.interface";
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
-import { BaseEntity } from "../../shared/interfaces/base.entity";
+import { BaseEssence } from "../../shared/interfaces/base.essence";
 import { Router } from "@angular/router";
 import { SelectEvent } from "../../shared/interfaces/select.event";
 
@@ -26,7 +26,9 @@ export class MainPageComponent implements OnInit{
   title = 'RickAndMorty';
   text: string = '';
 
-  results: ResultsData[] = [];
+  public results: ResultsData[] = [];
+
+  public carouselData: any = null;
 
   constructor(
     private httpService: HttpService,
@@ -54,7 +56,7 @@ export class MainPageComponent implements OnInit{
     this.route.navigate(['/details', event.value]).then();
   }
 
-  private buildEntity<T extends BaseEntity>(key: SearchedEntities, data: T[]): ResultsData {
+  private buildEntity<T extends BaseEssence>(key: SearchedEntities, data: T[]): ResultsData {
     return {
       ...SEARCHED_ENTITIES_CONFIG[key],
       items: data.map(item => ({
@@ -62,6 +64,10 @@ export class MainPageComponent implements OnInit{
         label: item.name,
       })),
     };
+  }
+
+  private buildCarouselData(): void {
+    
   }
 
 }

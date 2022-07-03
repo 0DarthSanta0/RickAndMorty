@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector, props } from "@ngrx/store";
 import { GeneralState } from "../interfaces/general.state.interface";
-import { SearchData } from "../interfaces/search-data.interface";
+import { SearchData } from "../interfaces/search.data.interface";
 import { Character } from "../interfaces/character.interface";
 
 export const selectAll = createSelector(createFeatureSelector('app'), (state: GeneralState) : SearchData => {
@@ -13,4 +13,8 @@ export const selectAll = createSelector(createFeatureSelector('app'), (state: Ge
 
 export const selectCharacter = (id: number) => createSelector(createFeatureSelector('app'), (state: GeneralState) : Character | undefined => {
   return state.characters.find(item => item.id === id);
+});
+
+export const selectAllCharacters = createSelector(createFeatureSelector('app'), (state: GeneralState) : Character[] => {
+  return state.characters;
 });

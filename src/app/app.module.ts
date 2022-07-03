@@ -13,22 +13,28 @@ import { generalReducer } from "./shared/store/api.reducers";
 import { EffectsModule } from "@ngrx/effects";
 import { GeneralEffects } from "./shared/store/api.effects";
 import { RouterModule, Routes } from "@angular/router";
+import { PreviewComponent } from './modules/main-page/components/preview/preview.component';
+import { CarouselModule } from "primeng/carousel";
+import { RandomCarouselComponent } from './modules/main-page/components/random-carousel/random-carousel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
+    PreviewComponent,
+    RandomCarouselComponent,
   ],
-  imports: [
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    AutoCompleteModule,
-    BrowserAnimationsModule,
-    StoreModule.forRoot({app: generalReducer}),
-    EffectsModule.forRoot([GeneralEffects]),
-  ],
+    imports: [
+        HttpClientModule,
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        AutoCompleteModule,
+        BrowserAnimationsModule,
+        StoreModule.forRoot({app: generalReducer}),
+        EffectsModule.forRoot([GeneralEffects]),
+        CarouselModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,6 @@
-import { BaseEntity } from "./base.entity";
+import { BaseEssence } from "./base.essence";
 
-export interface Character extends BaseEntity{
+export interface Character extends BaseEssence{
   status: string | null;
   species: string | null;
   type: string | null;

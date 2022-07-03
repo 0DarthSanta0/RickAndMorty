@@ -1,7 +1,7 @@
 import { createReducer, on } from "@ngrx/store";
 import {
   doSearchCharacterRequestFail,
-  doSearchCharacterRequestSuccess,
+  doSearchCharacterRequestSuccess, doSearchMultipleCharactersRequestSuccess,
   doSearchRequestFail,
   doSearchRequestSuccess
 } from "./api.actions";
@@ -24,6 +24,12 @@ export const generalReducer = createReducer(
     };
   }),
   on(doSearchCharacterRequestSuccess, (state: GeneralState, {characters}) => {
+    return {
+      ...state,
+      characters,
+    }
+  }),
+  on(doSearchMultipleCharactersRequestSuccess, (state: GeneralState, {characters}) => {
     return {
       ...state,
       characters,

@@ -3,7 +3,10 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, forkJoin, map, mergeMap, of, switchMap } from "rxjs";
 import {
   doSearchCharacterRequest,
-  doSearchCharacterRequestFail, doSearchCharacterRequestSuccess,
+  doSearchCharacterRequestFail,
+  doSearchCharacterRequestSuccess,
+  doSearchMultipleCharactersRequest,
+  doSearchMultipleCharactersRequestFail,
   doSearchRequest,
   doSearchRequestFail,
   doSearchRequestSuccess
@@ -63,6 +66,25 @@ export class GeneralEffects {
       }),
       catchError(err => {
         return of(doSearchCharacterRequestFail);
+      })
+    )
+  })
+
+  public searchMultipleCharacters$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(doSearchMultipleCharactersRequest),
+      mergeMap(action => {
+        return this.httpService.searchMultipleCharacters(action.id);
+      }),
+      map((charactersResponse: Character[]) => {
+        return doSearchCharacterRequestSuccess(
+          {
+            characters: charactersResponse,
+          }
+        );
+      }),
+      catchError(err => {
+        return of(doSearchMultipleCharactersRequestFail);
       })
     )
   })
