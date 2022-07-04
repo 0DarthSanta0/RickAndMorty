@@ -29,3 +29,18 @@ export const doSearchMultipleCharactersRequestSuccess = createAction('[APi] sear
 
 export const doSearchMultipleCharactersRequestFail = createAction('[APi] search multiple character request fail');
 
+export const doSearchEpisodeRequest = createAction('[API] search episode request', props<{id: number}>());
+
+export const doSearchEpisodeRequestSuccess = createAction('[API] search episode request success', props<{
+  episodes: Episode[],
+}>());
+
+export const doSearchEpisodeRequestFail = createAction('[API] search episode request fail');
+
+export const doSearchLocationRequest = createAction('[API] search location request', props<{id: number}>());
+
+export const doSearchLocationRequestSuccess = createAction('[API] search location request success', props<{
+  locations: Location[],
+}>());
+
+export const doSearchLocationRequestFail = createAction('[API] search location request fail');

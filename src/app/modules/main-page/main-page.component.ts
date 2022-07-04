@@ -28,8 +28,6 @@ export class MainPageComponent implements OnInit{
 
   public results: ResultsData[] = [];
 
-  public carouselData: any = null;
-
   constructor(
     private httpService: HttpService,
     private store$: Store,
@@ -53,21 +51,25 @@ export class MainPageComponent implements OnInit{
   }
 
   public select(event: SelectEvent): void {
-    this.route.navigate(['/details', event.value]).then();
+    if (event.value.type === SearchedEntities.CHARACTERS)
+      this.route.navigate([`/details/${SearchedEntities.CHARACTERS}`, event.value.id]).then();
+    if (event.value.type === SearchedEntities.LOCATIONS)
+      this.route.navigate([`/details/${SearchedEntities.LOCATIONS}`, event.value.id]).then();
+    if (event.value.type === SearchedEntities.EPISODES)
+      this.route.navigate([`/details/${SearchedEntities.EPISODES}`, event.value.id]).then();
   }
 
   private buildEntity<T extends BaseEssence>(key: SearchedEntities, data: T[]): ResultsData {
     return {
       ...SEARCHED_ENTITIES_CONFIG[key],
       items: data.map(item => ({
-        value: item.id,
         label: item.name,
+        value: {
+          id: item.id,
+          type: key,
+        },
       })),
     };
-  }
-
-  private buildCarouselData(): void {
-    
   }
 
 }
