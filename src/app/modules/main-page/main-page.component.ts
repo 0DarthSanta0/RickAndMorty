@@ -23,17 +23,25 @@ import { SelectEvent } from "../../shared/interfaces/select.event";
 })
 export class MainPageComponent implements OnInit{
 
+  private readonly COUNT_OF_CHARACTERS: number = 826;
+
   title = 'RickAndMorty';
   text: string = '';
 
   public results: ResultsData[] = [];
+
+  public charactersIds: number[] = [];
 
   constructor(
     private httpService: HttpService,
     private store$: Store,
     private route: Router) { }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    for (let i = 0; i < 21; ++i) {
+      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
+    }
+  }
 
   public search(event: AutocompleteEvent): void {
     this.store$.dispatch(doSearchRequest({url: event.query}));

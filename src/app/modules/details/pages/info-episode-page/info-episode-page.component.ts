@@ -13,7 +13,11 @@ import { Episode } from "../../../../shared/interfaces/episode.interface";
 })
 export class InfoEpisodePageComponent implements OnInit {
 
+  private readonly ID_INDEX: number = 42;
+
   public episode: Episode | null = null;
+
+  public charactersIds: number[] = [];
 
   constructor(
     private store$: Store,
@@ -32,6 +36,9 @@ export class InfoEpisodePageComponent implements OnInit {
           this.episode = item;
         }
       }
+      this.episode?.characters?.forEach((item) => {
+        this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
+      });
     });
   }
 

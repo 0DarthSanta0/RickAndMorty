@@ -13,7 +13,11 @@ import { Location } from "../../../../shared/interfaces/location.interface";
 })
 export class InfoLocationPageComponent implements OnInit {
 
+  private readonly ID_INDEX: number = 42;
+
   public location: Location | null = null;
+
+  public charactersIds: number[] = [];
 
   constructor(
     private store$: Store,
@@ -32,6 +36,9 @@ export class InfoLocationPageComponent implements OnInit {
           this.location = item;
         }
       }
+      this.location?.residents?.forEach((item) => {
+        this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
+      });
     });
   }
 
