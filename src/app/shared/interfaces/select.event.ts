@@ -1,3 +1,5 @@
+import { ResultValue } from "./result.value.interface";
+
 export interface SelectEvent {
-  value: number
+  value: ResultValue;
 }

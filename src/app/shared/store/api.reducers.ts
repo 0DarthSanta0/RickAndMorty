@@ -2,6 +2,9 @@ import { createReducer, on } from "@ngrx/store";
 import {
   doSearchCharacterRequestFail,
   doSearchCharacterRequestSuccess,
+  doSearchEpisodeRequestSuccess,
+  doSearchLocationRequestSuccess,
+  doSearchMultipleCharactersRequestSuccess,
   doSearchRequestFail,
   doSearchRequestSuccess
 } from "./api.actions";
@@ -11,6 +14,8 @@ export const initialState: GeneralState = {
   characters: [],
   locations: [],
   episodes: [],
+  charactersForCarousel: [],
+  essenceForInfo: null,
 }
 
 export const generalReducer = createReducer(
@@ -27,6 +32,24 @@ export const generalReducer = createReducer(
     return {
       ...state,
       characters,
+    }
+  }),
+  on(doSearchLocationRequestSuccess, (state: GeneralState, {locations}) => {
+    return {
+      ...state,
+      locations,
+    }
+  }),
+  on(doSearchEpisodeRequestSuccess, (state: GeneralState, {episodes}) => {
+    return {
+      ...state,
+      episodes,
+    }
+  }),
+  on(doSearchMultipleCharactersRequestSuccess, (state: GeneralState, {characters}) => {
+    return {
+      ...state,
+      charactersForCarousel: characters,
     }
   }),
 )

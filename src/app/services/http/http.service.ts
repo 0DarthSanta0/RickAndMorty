@@ -39,4 +39,17 @@ export class HttpService {
   public searchEpisodeById(id: number): Observable<Episode> {
     return this.http.get<Episode>(`${this.BASE_URL}episode/${id}`);
   }
+
+  public searchMultipleCharacters(id: number[]): Observable<Character[]> {
+    return this.http.get<Character[]>(`${this.BASE_URL}character/${id}`);
+  }
+
+  public searchMultipleLocations(id: number[]): Observable<Location[]> {
+    return this.http.get<Location[]>(`${this.BASE_URL}location/${id}`);
+  }
+
+  public searchMultipleEpisodes(id: number[]): Observable<Episode[]> {
+    return this.http.get<Episode[]>(`${this.BASE_URL}episode/${id}`);
+  }
+
 }

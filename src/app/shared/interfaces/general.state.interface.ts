@@ -6,4 +6,6 @@ export interface GeneralState {
   characters: Character[],
   locations: Location[],
   episodes: Episode[],
+  charactersForCarousel: Character[],
+  essenceForInfo: Character | Location | Episode | null,
 }

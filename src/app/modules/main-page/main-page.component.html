@@ -1,7 +1,10 @@
 <div class="logo-div">Rick And Morty</div>
 <div class="center-element">
   <p-autoComplete [(ngModel)]="text" [group]="true" [suggestions]="results" (completeMethod)="search($event)"
-                  field="label" (onSelect)="select($event)" >
+                  field="label" (onSelect)="select($event)">
+    <ng-template let-item pTemplate="item">
+      <app-preview [id]="item.value.id" [type]="item.value.type"></app-preview>
+    </ng-template>
     <ng-template let-group pTemplate="group">
       <div class="flex align-items-center">
         <span>{{group.label}}</span>
@@ -9,4 +12,4 @@
     </ng-template>
   </p-autoComplete>
 </div>
-<div class="bar"></div>
+<app-characters-carousel class="random-carousel" [charactersIds]="charactersIds"></app-characters-carousel>

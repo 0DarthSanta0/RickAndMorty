@@ -9,10 +9,10 @@ import { Location } from "../../shared/interfaces/location.interface";
 import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event";
 import { map } from "rxjs";
 import { ResultsData } from "../../shared/interfaces/results.data";
-import { SearchData } from "../../shared/interfaces/search-data.interface";
+import { SearchData } from "../../shared/interfaces/search.data.interface";
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
-import { BaseEntity } from "../../shared/interfaces/base.entity";
+import { BaseEssence } from "../../shared/interfaces/base.essence";
 import { Router } from "@angular/router";
 import { SelectEvent } from "../../shared/interfaces/select.event";
 
@@ -23,17 +23,25 @@ import { SelectEvent } from "../../shared/interfaces/select.event";
 })
 export class MainPageComponent implements OnInit{
 
+  private readonly COUNT_OF_CHARACTERS: number = 826;
+
   title = 'RickAndMorty';
   text: string = '';
 
-  results: ResultsData[] = [];
+  public results: ResultsData[] = [];
+
+  public charactersIds: number[] = [];
 
   constructor(
     private httpService: HttpService,
     private store$: Store,
     private route: Router) { }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    for (let i = 0; i < 21; ++i) {
+      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
+    }
+  }
 
   public search(event: AutocompleteEvent): void {
     this.store$.dispatch(doSearchRequest({url: event.query}));
@@ -51,15 +59,23 @@ export class MainPageComponent implements OnInit{
   }
 
   public select(event: SelectEvent): void {
-    this.route.navigate(['/details', event.value]).then();
+    if (event.value.type === SearchedEntities.CHARACTERS)
+      this.route.navigate([`/details/${SearchedEntities.CHARACTERS}`, event.value.id]).then();
+    if (event.value.type === SearchedEntities.LOCATIONS)
+      this.route.navigate([`/details/${SearchedEntities.LOCATIONS}`, event.value.id]).then();
+    if (event.value.type === SearchedEntities.EPISODES)
+      this.route.navigate([`/details/${SearchedEntities.EPISODES}`, event.value.id]).then();
   }
 
-  private buildEntity<T extends BaseEntity>(key: SearchedEntities, data: T[]): ResultsData {
+  private buildEntity<T extends BaseEssence>(key: SearchedEntities, data: T[]): ResultsData {
     return {
       ...SEARCHED_ENTITIES_CONFIG[key],
       items: data.map(item => ({
-        value: item.id,
         label: item.name,
+        value: {
+          id: item.id,
+          type: key,
+        },
       })),
     };
   }

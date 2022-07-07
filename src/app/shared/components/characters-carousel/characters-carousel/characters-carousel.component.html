@@ -1,0 +1,13 @@
+<p-carousel [value]="characters" [numVisible]="3" [numScroll]="3">
+  <ng-template let-item pTemplate="item">
+    <button (click)="onClick(item?.id)">
+      <div>
+        <img src="{{item?.image}}" [alt]="item?.id" class="character-img">
+      </div>
+      <div>
+        <p>{{item?.name}}</p>
+      </div>
+    </button>
+  </ng-template>
+</p-carousel>
+
