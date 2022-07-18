@@ -6,9 +6,30 @@ import { InfoLocationPageComponent } from "./pages/info-location-page/info-locat
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 
 const routes: Routes = [
-  { path: `${SearchedEntities.CHARACTERS}/:id`, component: InfoCharacterPageComponent },
-  { path: `${SearchedEntities.EPISODES}/:id`, component: InfoEpisodePageComponent },
-  { path: `${SearchedEntities.LOCATIONS}/:id`, component: InfoLocationPageComponent },
+  {
+    path: `${SearchedEntities.CHARACTERS.toLowerCase()}/:id`,
+    component: InfoCharacterPageComponent,
+    data: {
+      breadcrumb: `${SearchedEntities.CHARACTERS}`,
+      isNotActive: false,
+    },
+  },
+  {
+    path: `${SearchedEntities.EPISODES.toLowerCase()}/:id`,
+    component: InfoEpisodePageComponent,
+    data: {
+      breadcrumb: `${SearchedEntities.EPISODES}`,
+      isNotActive: false,
+    },
+  },
+  {
+    path: `${SearchedEntities.LOCATIONS.toLowerCase()}/:id`,
+    component: InfoLocationPageComponent,
+    data: {
+      breadcrumb: `${SearchedEntities.LOCATIONS}`,
+      isNotActive: false,
+    },
+  },
 ];
 
 @NgModule({

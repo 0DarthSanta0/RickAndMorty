@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Character } from "../../../../shared/interfaces/character.interface";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
@@ -9,7 +9,8 @@ import { Location } from "../../../../shared/interfaces/location.interface";
 @Component({
   selector: 'app-info-location-page',
   templateUrl: './info-location-page.component.html',
-  styleUrls: ['./info-location-page.component.scss']
+  styleUrls: ['./info-location-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoLocationPageComponent implements OnInit {
 
