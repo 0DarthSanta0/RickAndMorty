@@ -16,13 +16,17 @@ import { RouterModule, Routes } from "@angular/router";
 import { PreviewComponent } from './modules/main-page/components/preview/preview.component';
 import { CarouselModule } from "primeng/carousel";
 import { CharactersCarouselModule } from "./shared/components/characters-carousel/characters-carousel.module";
+import { TooltipModule } from "primeng/tooltip";
 import { LocalStorageInterceptor } from "./shared/classes/local-storage.interceptor";
+import { BreadcrumbComponent } from './modules/breadcrumb/breadcrumb.component';
+import { BreadcrumbModule } from "primeng/breadcrumb";
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
     PreviewComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     HttpClientModule,
@@ -35,6 +39,8 @@ import { LocalStorageInterceptor } from "./shared/classes/local-storage.intercep
     EffectsModule.forRoot([GeneralEffects]),
     CarouselModule,
     CharactersCarouselModule,
+    TooltipModule,
+    BreadcrumbModule,
   ],
   providers: [
     {

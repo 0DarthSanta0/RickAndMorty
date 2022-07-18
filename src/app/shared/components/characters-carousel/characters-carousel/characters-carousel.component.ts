@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Character } from "../../../interfaces/character.interface";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
@@ -9,7 +9,8 @@ import { SearchedEntities } from "../../../enums/searched.entities";
 @Component({
   selector: 'app-characters-carousel',
   templateUrl: './characters-carousel.component.html',
-  styleUrls: ['./characters-carousel.component.scss']
+  styleUrls: ['./characters-carousel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharactersCarouselComponent implements OnInit {
 
@@ -20,15 +21,19 @@ export class CharactersCarouselComponent implements OnInit {
   constructor(
     private store$: Store,
     private route: Router,
+    private changeDetector: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
     this.store$.dispatch(doSearchMultipleCharactersRequest({id: this.charactersIds}));
-    this.store$.select(selectCharactersForCarousel).subscribe((result: Character[]) => this.characters = result);
-  }
+    this.store$.select(selectCharactersForCarousel).subscribe((result: Character[]) => {
+      this.characters = result;
+      this.changeDetector.detectChanges();
+    });
+  };
 
   public onClick(id: number) {
-    this.route.navigate([`/details/${SearchedEntities.CHARACTERS}`, id]).then();
+    this.route.navigate([`/details/${SearchedEntities.CHARACTERS.toLowerCase()}`, id]).then();
   }
 
 }

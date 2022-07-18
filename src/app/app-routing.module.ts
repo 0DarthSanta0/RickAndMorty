@@ -4,8 +4,22 @@ import { MainPageComponent } from "./modules/main-page/main-page.component";
 import { DetailsModule } from "./modules/details/details.module";
 
 const appRoutes: Routes = [
-  { path: '', component: MainPageComponent },
-  { path: 'details', loadChildren: () => import('./modules/details/details.module').then(m => m.DetailsModule)},
+  {
+    path: '',
+    component: MainPageComponent,
+    data: {
+      breadcrumb: 'Main',
+      isNotActive: false,
+    },
+  },
+  {
+    path: 'details',
+    loadChildren: () => import('./modules/details/details.module').then(m => m.DetailsModule),
+    data: {
+      breadcrumb: 'Details',
+      isNotActive: true,
+    }
+  },
 ];
 
 @NgModule({

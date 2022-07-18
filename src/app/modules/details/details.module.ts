@@ -7,6 +7,7 @@ import { InfoLocationPageComponent } from './pages/info-location-page/info-locat
 import { InfoEpisodePageComponent } from './pages/info-episode-page/info-episode-page.component';
 import { CarouselModule } from "primeng/carousel";
 import { CharactersCarouselModule } from "../../shared/components/characters-carousel/characters-carousel.module";
+import { BreadcrumbModule } from "primeng/breadcrumb";
 
 
 @NgModule({
@@ -17,11 +18,12 @@ import { CharactersCarouselModule } from "../../shared/components/characters-car
   ],
   exports: [
   ],
-  imports: [
-    CommonModule,
-    DetailsRoutingModule,
-    CarouselModule,
-    CharactersCarouselModule
-  ]
+    imports: [
+        CommonModule,
+        DetailsRoutingModule,
+        CarouselModule,
+        CharactersCarouselModule,
+        BreadcrumbModule
+    ]
 })
 export class DetailsModule { }

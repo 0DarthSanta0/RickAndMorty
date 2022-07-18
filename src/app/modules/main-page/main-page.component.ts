@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpService } from "../../services/http/http.service";
 import { Character } from "../../shared/interfaces/character.interface";
 import { Store } from "@ngrx/store";
@@ -20,6 +20,7 @@ import { SelectEvent } from "../../shared/interfaces/select.event";
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainPageComponent implements OnInit{
 
@@ -35,7 +36,9 @@ export class MainPageComponent implements OnInit{
   constructor(
     private httpService: HttpService,
     private store$: Store,
-    private route: Router) { }
+    private route: Router,
+    private changeDetector: ChangeDetectorRef,
+    ) { }
 
   public ngOnInit() {
     for (let i = 0; i < 21; ++i) {
@@ -49,31 +52,30 @@ export class MainPageComponent implements OnInit{
       .pipe(
         map((data: SearchData) => {
           return [
-            this.buildEntity<Character>(SearchedEntities.CHARACTERS, data.characters),
-            this.buildEntity<Location>(SearchedEntities.LOCATIONS, data.locations),
-            this.buildEntity<Episode>(SearchedEntities.EPISODES, data.episodes),
+            this.buildEntity(SearchedEntities.CHARACTERS, data.characters),
+            this.buildEntity(SearchedEntities.LOCATIONS, data.locations),
+            this.buildEntity(SearchedEntities.EPISODES, data.episodes),
           ]
         }),
       )
-      .subscribe((result: ResultsData[]) => this.results = result);
+      .subscribe((result: ResultsData[]) => {
+        this.results = result;
+        this.changeDetector.detectChanges();
+      });
   }
 
   public select(event: SelectEvent): void {
-    if (event.value.type === SearchedEntities.CHARACTERS)
-      this.route.navigate([`/details/${SearchedEntities.CHARACTERS}`, event.value.id]).then();
-    if (event.value.type === SearchedEntities.LOCATIONS)
-      this.route.navigate([`/details/${SearchedEntities.LOCATIONS}`, event.value.id]).then();
-    if (event.value.type === SearchedEntities.EPISODES)
-      this.route.navigate([`/details/${SearchedEntities.EPISODES}`, event.value.id]).then();
+    this.route.navigate([`/details/${event.value.type?.toLowerCase()}`, event.value.id]);
   }
 
-  private buildEntity<T extends BaseEssence>(key: SearchedEntities, data: T[]): ResultsData {
+  private buildEntity(key: SearchedEntities, data: Character[] | Location[] | Episode[]): ResultsData {
     return {
       ...SEARCHED_ENTITIES_CONFIG[key],
       items: data.map(item => ({
         label: item.name,
         value: {
           id: item.id,
+          essence: item,
           type: key,
         },
       })),

@@ -18,12 +18,11 @@ import { Filter } from "../interfaces/filter.interface";
 export class LocalStorageInterceptor implements HttpInterceptor{
   constructor(private http: HttpService) { }
 
-  intercept(req: HttpRequest<null>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (localStorage.getItem(JSON.stringify(req.url))) {
       // @ts-ignore
       const cachedResponse = JSON.parse(localStorage.getItem(JSON.stringify(req.url)));
-      //any и ts-ignore потом уберу
-      return of(new HttpResponse({body: cachedResponse}));
+      return of(new HttpResponse({ body: cachedResponse }));
     } else {
       return next.handle(req).pipe(
         //@ts-ignore

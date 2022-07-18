@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Character } from "../../../../shared/interfaces/character.interface";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
@@ -9,7 +9,8 @@ import { Episode } from "../../../../shared/interfaces/episode.interface";
 @Component({
   selector: 'app-info-episode-page',
   templateUrl: './info-episode-page.component.html',
-  styleUrls: ['./info-episode-page.component.scss']
+  styleUrls: ['./info-episode-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoEpisodePageComponent implements OnInit {
 
