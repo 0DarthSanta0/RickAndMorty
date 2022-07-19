@@ -8,7 +8,6 @@ const appRoutes: Routes = [
     path: '',
     component: MainPageComponent,
     data: {
-      breadcrumb: 'Main',
       isNotActive: false,
     },
   },
