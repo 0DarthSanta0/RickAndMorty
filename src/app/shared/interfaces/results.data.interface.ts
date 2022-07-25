@@ -1,4 +1,4 @@
-import { ResultsItem } from "./results.item";
+import { ResultsItem } from "./results.item.interface";
 
 export interface ResultsData {
   label: string | null;

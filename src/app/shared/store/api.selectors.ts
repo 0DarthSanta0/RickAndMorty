@@ -1,4 +1,4 @@
-import { createFeatureSelector, createSelector, props } from "@ngrx/store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { GeneralState } from "../interfaces/general.state.interface";
 import { SearchData } from "../interfaces/search.data.interface";
 import { Character } from "../interfaces/character.interface";
@@ -26,5 +26,5 @@ export const selectEpisode = (id: number) => createSelector(createFeatureSelecto
 });
 
 export const selectCharactersForCarousel = createSelector(createFeatureSelector('app'), (state: GeneralState) : Character[] => {
-  return state.charactersForCarousel
+  return state.carouselCharacters
 });

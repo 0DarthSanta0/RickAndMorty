@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, forkJoin, map, mergeMap, of, switchMap } from "rxjs";
+import { catchError, forkJoin, map, mergeMap, of } from "rxjs";
 import {
   doSearchCharacterRequest,
   doSearchCharacterRequestFail,

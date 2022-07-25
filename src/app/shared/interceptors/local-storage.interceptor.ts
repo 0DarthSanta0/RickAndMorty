@@ -1,14 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpService } from "../../services/http/http.service";
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
   HttpResponse,
-  HttpSentEvent
 } from "@angular/common/http";
-import { map, Observable, of, tap } from "rxjs";
+import { Observable, of, tap } from "rxjs";
 
 @Injectable()
 export class LocalStorageInterceptor implements HttpInterceptor{

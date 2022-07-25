@@ -4,8 +4,8 @@ import { Character } from "../../../../shared/interfaces/character.interface";
 import { selectCharacter } from "../../../../shared/store/api.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { doSearchCharacterRequest } from "../../../../shared/store/api.actions";
-import { SearchedEntities } from "../../../../shared/enums/searched.entities";
-import { BaseUrl } from "../../../../shared/enums/base.url";
+import { tap } from "rxjs";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: 'app-info-character-page',
@@ -16,13 +16,7 @@ import { BaseUrl } from "../../../../shared/enums/base.url";
 
 export class InfoCharacterPageComponent implements OnInit {
 
-  public items = [
-    {label: `${BaseUrl.MAIN}`, url: `${BaseUrl.BASE_URL}`},
-    {label: `${BaseUrl.DETAILS}`},
-    {label: `${SearchedEntities.CHARACTERS}`},
-  ];
-
-  public character: Character | null = null;
+  public character: Character | undefined;
 
   constructor(
     private store$: Store,
@@ -33,21 +27,23 @@ export class InfoCharacterPageComponent implements OnInit {
 
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
+    this.selectCharacter(id);
+  }
 
-    this.store$.select(selectCharacter(id)).subscribe((item: Character | undefined) => {
-      if (item) {
+  private selectCharacter(id: number): void {
+    this.store$.select(selectCharacter(id))
+      .pipe(
+        tap((character: Character | undefined) => {
+          if(!character) {
+            this.store$.dispatch(doSearchCharacterRequest({id}));
+          }
+        }),
+        filter((character: Character | undefined) => !!character),
+      )
+      .subscribe((item: Character | undefined) => {
         this.character = item;
-      } else {
-        this.store$.dispatch(doSearchCharacterRequest({id: id}));
-        if (item) {
-          this.character = item;
-        }
-      }
-      if (this.character?.name) {
-        this.items.push({label: this.character?.name});
-      }
-      this.detectChange.detectChanges();
-    });
+        this.detectChange.markForCheck();
+      });
   }
 }
 

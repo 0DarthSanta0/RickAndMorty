@@ -2,7 +2,7 @@
   <ng-template let-item pTemplate="item">
     <button (click)="onClick(item?.id)">
       <div>
-        <img src="{{item?.image}}" [alt]="item?.id" class="character-img">
+        <img src="{{item?.image}}" [alt]="item?.name" class="character-img">
       </div>
       <div>
         <p>{{item?.name}}</p>

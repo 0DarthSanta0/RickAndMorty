@@ -6,15 +6,14 @@ import { doSearchRequest } from "../../shared/store/api.actions";
 import { selectAll } from "../../shared/store/api.selectors";
 import { Episode } from "../../shared/interfaces/episode.interface";
 import { Location } from "../../shared/interfaces/location.interface";
-import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event";
+import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event.interface";
 import { map } from "rxjs";
-import { ResultsData } from "../../shared/interfaces/results.data";
+import { ResultsData } from "../../shared/interfaces/results.data.interface";
 import { SearchData } from "../../shared/interfaces/search.data.interface";
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
-import { BaseEssence } from "../../shared/interfaces/base.essence";
 import { Router } from "@angular/router";
-import { SelectEvent } from "../../shared/interfaces/select.event";
+import { SelectEvent } from "../../shared/interfaces/select.event.interface";
 
 @Component({
   selector: 'app-main-page',
@@ -26,7 +25,6 @@ export class MainPageComponent implements OnInit{
 
   private readonly COUNT_OF_CHARACTERS: number = 826;
 
-  title = 'RickAndMorty';
   text: string = '';
 
   public results: ResultsData[] = [];
@@ -41,9 +39,7 @@ export class MainPageComponent implements OnInit{
     ) { }
 
   public ngOnInit() {
-    for (let i = 0; i < 21; ++i) {
-      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
-    }
+    this.getRandomIds();
   }
 
   public search(event: AutocompleteEvent): void {
@@ -60,7 +56,7 @@ export class MainPageComponent implements OnInit{
       )
       .subscribe((result: ResultsData[]) => {
         this.results = result;
-        this.changeDetector.detectChanges();
+        this.changeDetector.markForCheck();
       });
   }
 
@@ -80,6 +76,12 @@ export class MainPageComponent implements OnInit{
         },
       })),
     };
+  }
+
+  private getRandomIds(): void {
+    for (let i = 0; i < 21; ++i) {
+      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
+    }
   }
 
 }

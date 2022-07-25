@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Character } from "../../../../shared/interfaces/character.interface";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectCharacter, selectLocation } from "../../../../shared/store/api.selectors";
-import { doSearchCharacterRequest, doSearchLocationRequest } from "../../../../shared/store/api.actions";
+import { selectLocation } from "../../../../shared/store/api.selectors";
+import { doSearchLocationRequest } from "../../../../shared/store/api.actions";
 import { Location } from "../../../../shared/interfaces/location.interface";
 
 @Component({
@@ -22,12 +21,16 @@ export class InfoLocationPageComponent implements OnInit {
 
   constructor(
     private store$: Store,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private detectChange: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
+    this.selectLocation(id);
+  }
 
+  private selectLocation(id: number): void {
     this.store$.select(selectLocation(id)).subscribe((item: Location | undefined) => {
       if (item) {
         this.location = item;
@@ -40,6 +43,7 @@ export class InfoLocationPageComponent implements OnInit {
       this.location?.residents?.forEach((item) => {
         this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
       });
+      this.detectChange.markForCheck();
     });
   }
 
