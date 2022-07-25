@@ -50,6 +50,7 @@ export class InfoEpisodePageComponent implements OnInit {
           // this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
         });
         this.charactersIds = a;
+        console.log(this.charactersIds);
         this.detectChange.markForCheck();
       });
   }
