@@ -45,7 +45,6 @@ export const generalReducer = createReducer(
     }
   }),
   on(doSearchMultipleCharactersRequestSuccess, (state: GeneralState, {characters}) => {
-    console.log(characters)
     return {
       ...state,
       carouselCharacters: characters,

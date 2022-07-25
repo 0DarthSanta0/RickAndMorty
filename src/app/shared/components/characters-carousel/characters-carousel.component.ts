@@ -14,7 +14,7 @@ import { SearchedEntities } from "../../enums/searched.entities";
 })
 export class CharactersCarouselComponent implements OnInit {
 
-  @Input() public charactersIds: number[] = [];
+  @Input() public charactersIds: number[] = [1,2];
 
   public characters: Character[] = [];
 
@@ -25,10 +25,8 @@ export class CharactersCarouselComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.charactersIds)
     this.store$.dispatch(doSearchMultipleCharactersRequest({id: this.charactersIds}));
     this.selectCharacters();
-    console.log(this.store$)
   };
 
   public onClick(id: number) {
