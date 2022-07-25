@@ -1,0 +1,9 @@
+.value {
+  width: 100%;
+}
+
+::ng-deep .preview {
+  z-index: 10;
+  position: absolute;
+  margin-left: 10rem;
+}
