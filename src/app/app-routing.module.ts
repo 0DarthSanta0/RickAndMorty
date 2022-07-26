@@ -7,17 +7,10 @@ const appRoutes: Routes = [
   {
     path: '',
     component: MainPageComponent,
-    data: {
-      isNotActive: false,
-    },
   },
   {
     path: 'details',
     loadChildren: () => import('./modules/details/details.module').then(m => m.DetailsModule),
-    data: {
-      breadcrumb: 'Details',
-      isNotActive: true,
-    }
   },
 ];
 

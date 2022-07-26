@@ -6,6 +6,10 @@ import { ActivatedRoute } from "@angular/router";
 import { doSearchCharacterRequest } from "../../../../shared/store/api.actions";
 import { tap } from "rxjs";
 import { filter } from "rxjs/operators";
+import { BreadcrumbService } from "../../../../services/breadcrumb/breadcrumb.service";
+import { MenuItem } from "primeng/api";
+import { BaseUrl } from "../../../../shared/enums/base.url";
+import { SearchedEntities } from "../../../../shared/enums/searched.entities";
 
 @Component({
   selector: 'app-info-character-page',
@@ -16,18 +20,26 @@ import { filter } from "rxjs/operators";
 
 export class InfoCharacterPageComponent implements OnInit {
 
+  private readonly breadcrumbs: MenuItem[] = [
+    {label: `${BaseUrl.MAIN}`, routerLink: `/`},
+    {label: `${BaseUrl.DETAILS}`},
+    {label: `${SearchedEntities.CHARACTERS}`},
+  ];
+
   public character: Character | undefined;
 
   constructor(
     private store$: Store,
     private activateRoute: ActivatedRoute,
     private detectChange: ChangeDetectorRef,
+    private breadcrumbService: BreadcrumbService,
   ) {
   }
 
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectCharacter(id);
+    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   private selectCharacter(id: number): void {
@@ -42,8 +54,10 @@ export class InfoCharacterPageComponent implements OnInit {
       )
       .subscribe((item: Character | undefined) => {
         this.character = item;
+        this.breadcrumbs.push({ label: `${item?.name}`, });
         this.detectChange.markForCheck();
       });
+    this.detectChange.markForCheck();
   }
 }
 

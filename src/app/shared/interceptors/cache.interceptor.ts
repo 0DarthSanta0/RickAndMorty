@@ -9,7 +9,7 @@ import {
 import { Observable, of, tap } from "rxjs";
 
 @Injectable()
-export class LocalStorageInterceptor implements HttpInterceptor{
+export class CacheInterceptor implements HttpInterceptor{
 
   private readonly timeLimit = 15 * 60 * 1000;
 

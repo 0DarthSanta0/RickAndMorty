@@ -14,6 +14,9 @@ import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
 import { Router } from "@angular/router";
 import { SelectEvent } from "../../shared/interfaces/select.event.interface";
+import { BreadcrumbService } from "../../services/breadcrumb/breadcrumb.service";
+import { BaseUrl } from 'src/app/shared/enums/base.url';
+import { MenuItem } from "primeng/api";
 
 @Component({
   selector: 'app-main-page',
@@ -24,6 +27,10 @@ import { SelectEvent } from "../../shared/interfaces/select.event.interface";
 export class MainPageComponent implements OnInit{
 
   private readonly COUNT_OF_CHARACTERS: number = 826;
+
+  private readonly breadcrumbs: MenuItem[] = [
+    {label: `${BaseUrl.MAIN}`, url: undefined},
+  ];
 
   text: string = '';
 
@@ -36,10 +43,12 @@ export class MainPageComponent implements OnInit{
     private store$: Store,
     private route: Router,
     private changeDetector: ChangeDetectorRef,
+    private breadcrumbService: BreadcrumbService,
     ) { }
 
   public ngOnInit() {
     this.getRandomIds();
+    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   public search(event: AutocompleteEvent): void {
@@ -61,7 +70,7 @@ export class MainPageComponent implements OnInit{
   }
 
   public select(event: SelectEvent): void {
-    this.route.navigate([`/details/${event.value.type?.toLowerCase()}`, event.value.id]);
+    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${event.value.type?.toLowerCase()}`, event.value.id]);
   }
 
   private buildEntity(key: SearchedEntities, data: Character[] | Location[] | Episode[]): ResultsData {

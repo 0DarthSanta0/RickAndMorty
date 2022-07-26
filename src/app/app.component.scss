@@ -5,3 +5,7 @@
   flex-direction: column;
   align-items: center;
 }
+
+::ng-deep .p-breadcrumb {
+  border: 0;
+}

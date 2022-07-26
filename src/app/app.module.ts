@@ -15,8 +15,7 @@ import { PreviewComponent } from './modules/main-page/components/preview/preview
 import { CarouselModule } from "primeng/carousel";
 import { CharactersCarouselModule } from "./shared/components/characters-carousel/characters-carousel.module";
 import { TooltipModule } from "primeng/tooltip";
-import { LocalStorageInterceptor } from "./shared/interceptors/local-storage.interceptor";
-import { BreadcrumbComponent } from './modules/breadcrumb/breadcrumb.component';
+import { CacheInterceptor } from "./shared/interceptors/cache.interceptor";
 import { BreadcrumbModule } from "primeng/breadcrumb";
 
 @NgModule({
@@ -24,7 +23,6 @@ import { BreadcrumbModule } from "primeng/breadcrumb";
     AppComponent,
     MainPageComponent,
     PreviewComponent,
-    BreadcrumbComponent,
   ],
   imports: [
     HttpClientModule,
@@ -44,7 +42,7 @@ import { BreadcrumbModule } from "primeng/breadcrumb";
     {
       provide: HTTP_INTERCEPTORS,
       multi: true,
-      useClass: LocalStorageInterceptor,
+      useClass: CacheInterceptor,
     }
   ],
   bootstrap: [AppComponent]
