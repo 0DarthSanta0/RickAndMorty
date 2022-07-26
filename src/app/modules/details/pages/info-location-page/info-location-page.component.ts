@@ -4,6 +4,8 @@ import { ActivatedRoute } from "@angular/router";
 import { selectLocation } from "../../../../shared/store/api.selectors";
 import { doSearchLocationRequest } from "../../../../shared/store/api.actions";
 import { Location } from "../../../../shared/interfaces/location.interface";
+import { tap } from "rxjs";
+import { filter } from "rxjs/operators";
 
 @Component({
   selector: 'app-info-location-page',
@@ -15,7 +17,7 @@ export class InfoLocationPageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  public location: Location | null = null;
+  public location: Location | undefined;
 
   public charactersIds: number[] = [];
 
@@ -23,7 +25,8 @@ export class InfoLocationPageComponent implements OnInit {
     private store$: Store,
     private activateRoute: ActivatedRoute,
     private detectChange: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
@@ -31,20 +34,24 @@ export class InfoLocationPageComponent implements OnInit {
   }
 
   private selectLocation(id: number): void {
-    this.store$.select(selectLocation(id)).subscribe((item: Location | undefined) => {
-      if (item) {
+    this.store$.select(selectLocation(id))
+      .pipe(
+        tap((location: Location | undefined) => {
+          if (!location) {
+            this.store$.dispatch(doSearchLocationRequest({id}))
+          }
+        }),
+        filter((location: Location | undefined) => !!location),
+      )
+      .subscribe((item: Location | undefined) => {
         this.location = item;
-      } else {
-        this.store$.dispatch(doSearchLocationRequest({id: id}));
-        if(item) {
-          this.location = item;
-        }
-      }
-      this.location?.residents?.forEach((item) => {
-        this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
+        let temp: number[] = [];
+        this.location?.residents?.forEach((item) => {
+          temp.push(Number(item.slice(this.ID_INDEX)));
+        });
+        this.charactersIds = temp;
+        this.detectChange.markForCheck();
       });
-      this.detectChange.markForCheck();
-    });
   }
 
 }

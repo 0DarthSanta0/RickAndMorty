@@ -10,16 +10,24 @@ import { Observable, of, tap } from "rxjs";
 
 @Injectable()
 export class LocalStorageInterceptor implements HttpInterceptor{
+
+  private readonly timeLimit = 15 * 60 * 1000;
+
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (localStorage.getItem(JSON.stringify(req.url))) {
-      const cachedResponse = JSON.parse(localStorage.getItem(JSON.stringify(req.url)) || '');
-      return of(new HttpResponse({ body: cachedResponse }));
+    const item = localStorage.getItem(req.url);
+    const cachedResponse = JSON.parse(item || '{}');
+    if (item && +new Date() - cachedResponse.initTime < this.timeLimit) {
+      return of(new HttpResponse({ body: cachedResponse.content }));
     } else {
       return next.handle(req).pipe(
         tap((response: HttpResponse<any> | HttpEvent<any>) => {
-          localStorage.setItem(req.url, JSON.stringify((response as HttpResponse<any>).body));
+          const temp = {
+            initTime: +new Date(),
+            content: (response as HttpResponse<any>).body,
+          }
+          localStorage.setItem(req.url, JSON.stringify(temp));
         }),
       )
     }

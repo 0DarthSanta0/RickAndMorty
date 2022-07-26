@@ -44,12 +44,11 @@ export class InfoEpisodePageComponent implements OnInit {
       )
       .subscribe((item: Episode | undefined) => {
         this.episode = item;
-        let a: number[] = [];
+        let temp: number[] = [];
         this.episode?.characters?.forEach((item) => {
-          a.push(Number(item.slice(this.ID_INDEX)));
-          // this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
+          temp.push(Number(item.slice(this.ID_INDEX)));
         });
-        this.charactersIds = a;
+        this.charactersIds = temp;
         this.detectChange.markForCheck();
       });
   }
