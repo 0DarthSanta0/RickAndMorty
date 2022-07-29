@@ -3,6 +3,8 @@
 }
 
 p {
+  text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color);
+  color: var(--main-color);
   margin: 1rem;
   font-size: 1.3rem;
   font-family: "Berlin Sans FB";
@@ -15,15 +17,22 @@ button {
   margin: 0;
 }
 
-:host ::ng-deep .p-carousel-items-content {
-  width: 45rem;
-}
 
-:host ::ng-deep .p-carousel-item {
-  width: 15rem;
-  margin: 0;
-}
 
-:host ::ng-deep .p-carousel-indicators .p-carousel-indicator.p-highlight button {
-  background-color: black;
+:host {
+  ::ng-deep {
+    .ng-star-inserted {
+      background-color: var(--back-color);
+    }
+    .p-carousel-items-content {
+      width: 45rem;
+    }
+    .p-carousel-item {
+      width: 15rem;
+      margin: 0;
+    }
+    .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+      background-color: var(--main-color);
+    }
+  }
 }

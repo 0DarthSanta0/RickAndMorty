@@ -6,8 +6,25 @@
   align-items: center;
 }
 
-::ng-deep {
-  .p-breadcrumb {
-    border: 0;
+:host {
+  ::ng-deep {
+    .p-carousel-items-content {
+      border-radius: 2rem;
+    }
+    .p-breadcrumb ul li.p-breadcrumb-chevron {
+      margin: 0 0.5rem 0 0.5rem;
+      color: var(--main-color);
+    }
+    .p-breadcrumb ul li .p-menuitem-text {
+      text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color);
+      color: var(--main-color);
+      font-family: 'Lato', sans-serif;
+      font-size: 1rem;
+    }
+    .p-breadcrumb {
+      border: 0;
+      background-color: var(--back-color);
+    }
   }
 }
+
