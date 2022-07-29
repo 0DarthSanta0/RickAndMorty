@@ -4,7 +4,7 @@
                   field="label" (onSelect)="select($event)">
     <ng-template let-item pTemplate="item">
       <div>
-        <app-preview [essence]="item.value.essence" [type]="item.value.type"></app-preview>
+        <app-preview [essence]="item.value.essence" [type]="item.value.type" id="{{item.value.type}}{{item.value.id}}"></app-preview>
       </div>
     </ng-template>
     <ng-template let-group pTemplate="group">

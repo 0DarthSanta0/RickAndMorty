@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectEpisode } from "../../../../shared/store/api.selectors";
+import { selectInfoEpisode } from "../../../../shared/store/api.selectors";
 import { doSearchEpisodeRequest } from "../../../../shared/store/api.actions";
 import { Episode } from "../../../../shared/interfaces/episode.interface";
 import { tap } from "rxjs";
@@ -21,11 +21,7 @@ export class InfoEpisodePageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  private readonly breadcrumbs: MenuItem[] = [
-    {label: `${BaseUrl.MAIN}`, routerLink: `/`},
-    {label: `${BaseUrl.DETAILS}`},
-    {label: `${SearchedEntities.EPISODES}`},
-  ];
+  private breadcrumbs: MenuItem[] = [];
 
   public episode: Episode | undefined;
 
@@ -41,11 +37,10 @@ export class InfoEpisodePageComponent implements OnInit {
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectEpisode(id);
-    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   private selectEpisode(id: number): void {
-    this.store$.select(selectEpisode(id))
+    this.store$.select(selectInfoEpisode)
       .pipe(
         tap((episode: Episode | undefined) => {
           if (!episode) {
@@ -56,12 +51,18 @@ export class InfoEpisodePageComponent implements OnInit {
       )
       .subscribe((item: Episode | undefined) => {
         this.episode = item;
-        this.breadcrumbs.push({ label: `${item?.name}`, });
+        this.breadcrumbs = [
+          { label: `${BaseUrl.MAIN}`, routerLink: `/` },
+          { label: `${BaseUrl.DETAILS}` },
+          { label: `${SearchedEntities.EPISODES}` },
+          { label: `${item?.name}` },
+        ];
         let temp: number[] = [];
         this.episode?.characters?.forEach((item) => {
           temp.push(Number(item.slice(this.ID_INDEX)));
         });
         this.charactersIds = temp;
+        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
         this.detectChange.markForCheck();
       });
   }

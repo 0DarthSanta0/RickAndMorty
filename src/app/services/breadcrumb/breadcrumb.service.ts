@@ -7,16 +7,16 @@ import { MenuItem } from "primeng/api";
 })
 export class BreadcrumbService {
 
-  private breadcrumbs = new Subject<MenuItem[]>();
+  private breadcrumbs$ = new Subject<MenuItem[]>();
 
   constructor() { }
 
   public getBreadcrumbs$(): Observable<MenuItem[]> {
-    return this.breadcrumbs;
+    return this.breadcrumbs$.asObservable();
   }
 
   public setBreadcrumbs(breadcrumbsList: MenuItem[]): void {
-    this.breadcrumbs.next(breadcrumbsList);
+    this.breadcrumbs$.next(breadcrumbsList);
   }
 
 }

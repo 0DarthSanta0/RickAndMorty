@@ -7,5 +7,7 @@ export interface GeneralState {
   locations: Location[],
   episodes: Episode[],
   carouselCharacters: Character[],
-  essenceForInfo: Character | Location | Episode | null,
+  infoCharacter: Character | undefined,
+  infoLocation: Location | undefined,
+  infoEpisode: Episode | undefined,
 }

@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } 
 import { Character } from "../../interfaces/character.interface";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
-import { doSearchMultipleCharactersRequest } from "../../store/api.actions";
+import { doSearchMultipleCharactersRequest, loadCarouselCharacterInfo } from "../../store/api.actions";
 import { selectCharactersForCarousel } from "../../store/api.selectors";
 import { SearchedEntities } from "../../enums/searched.entities";
+import { BaseUrl } from "../../enums/base.url";
 
 @Component({
   selector: 'app-characters-carousel',
@@ -30,7 +31,8 @@ export class CharactersCarouselComponent implements OnInit {
   };
 
   public onClick(id: number) {
-    this.route.navigate([`/details/${SearchedEntities.CHARACTERS.toLowerCase()}`, id]).then();
+    this.store$.dispatch(loadCarouselCharacterInfo({id}));
+    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${SearchedEntities.CHARACTERS.toLowerCase()}`, id]).then();
   }
 
   private selectCharacters(): void {

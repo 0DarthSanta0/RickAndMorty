@@ -1,10 +1,13 @@
 import { createReducer, on } from "@ngrx/store";
 import {
+  loadCharacterInfo,
+  loadEpisodeInfo,
+  loadLocationInfo,
   doSearchCharacterRequestSuccess,
   doSearchEpisodeRequestSuccess,
   doSearchLocationRequestSuccess,
   doSearchMultipleCharactersRequestSuccess,
-  doSearchRequestSuccess
+  doSearchRequestSuccess, loadCarouselCharacterInfo
 } from "./api.actions";
 import { GeneralState } from "../interfaces/general.state.interface";
 
@@ -13,7 +16,9 @@ export const initialState: GeneralState = {
   locations: [],
   episodes: [],
   carouselCharacters: [],
-  essenceForInfo: null,
+  infoCharacter: undefined,
+  infoEpisode: undefined,
+  infoLocation: undefined,
 }
 
 export const generalReducer = createReducer(
@@ -26,22 +31,22 @@ export const generalReducer = createReducer(
       episodes,
     };
   }),
-  on(doSearchCharacterRequestSuccess, (state: GeneralState, {characters}) => {
+  on(doSearchCharacterRequestSuccess, (state: GeneralState, {character}) => {
     return {
       ...state,
-      characters,
+      infoCharacter: character,
     }
   }),
-  on(doSearchLocationRequestSuccess, (state: GeneralState, {locations}) => {
+  on(doSearchLocationRequestSuccess, (state: GeneralState, {location}) => {
     return {
       ...state,
-      locations,
+      infoLocation: location,
     }
   }),
-  on(doSearchEpisodeRequestSuccess, (state: GeneralState, {episodes}) => {
+  on(doSearchEpisodeRequestSuccess, (state: GeneralState, {episode}) => {
     return {
       ...state,
-      episodes,
+      infoEpisode: episode,
     }
   }),
   on(doSearchMultipleCharactersRequestSuccess, (state: GeneralState, {characters}) => {
@@ -50,4 +55,28 @@ export const generalReducer = createReducer(
       carouselCharacters: characters,
     }
   }),
+  on(loadCharacterInfo, (state: GeneralState, {id}) => {
+    return {
+      ...state,
+      infoCharacter: state.characters.find(item => item.id === id),
+    }
+  }),
+  on(loadLocationInfo, (state: GeneralState, {id}) => {
+    return {
+      ...state,
+      infoLocation: state.locations.find(item => item.id === id),
+    }
+  }),
+  on(loadEpisodeInfo, (state: GeneralState, {id}) => {
+    return {
+      ...state,
+      infoEpisode: state.episodes.find(item => item.id === id),
+    }
+  }),
+  on(loadCarouselCharacterInfo, (state: GeneralState, {id}) => {
+    return {
+      ...state,
+      infoCharacter: state.carouselCharacters.find(item => item.id === id),
+    }
+  })
 )

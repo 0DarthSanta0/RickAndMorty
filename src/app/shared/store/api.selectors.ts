@@ -25,6 +25,18 @@ export const selectEpisode = (id: number) => createSelector(createFeatureSelecto
   return state.episodes.find(item => item.id === id);
 });
 
+export const selectInfoCharacter = createSelector(createFeatureSelector('app'), (state: GeneralState) : Character | undefined => {
+  return state.infoCharacter;
+});
+
+export const selectInfoLocation = createSelector(createFeatureSelector('app'), (state: GeneralState) : Location | undefined => {
+  return state.infoLocation;
+});
+
+export const selectInfoEpisode = createSelector(createFeatureSelector('app'), (state: GeneralState) : Episode | undefined => {
+  return state.infoEpisode;
+});
+
 export const selectCharactersForCarousel = createSelector(createFeatureSelector('app'), (state: GeneralState) : Character[] => {
-  return state.carouselCharacters
+  return state.carouselCharacters;
 });

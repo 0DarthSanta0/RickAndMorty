@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { Character } from "../../../../shared/interfaces/character.interface";
-import { selectCharacter } from "../../../../shared/store/api.selectors";
+import { selectInfoCharacter } from "../../../../shared/store/api.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { doSearchCharacterRequest } from "../../../../shared/store/api.actions";
 import { tap } from "rxjs";
@@ -20,11 +20,7 @@ import { SearchedEntities } from "../../../../shared/enums/searched.entities";
 
 export class InfoCharacterPageComponent implements OnInit {
 
-  private readonly breadcrumbs: MenuItem[] = [
-    {label: `${BaseUrl.MAIN}`, routerLink: `/`},
-    {label: `${BaseUrl.DETAILS}`},
-    {label: `${SearchedEntities.CHARACTERS}`},
-  ];
+  private breadcrumbs: MenuItem[] = [];
 
   public character: Character | undefined;
 
@@ -39,11 +35,10 @@ export class InfoCharacterPageComponent implements OnInit {
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectCharacter(id);
-    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   private selectCharacter(id: number): void {
-    this.store$.select(selectCharacter(id))
+    this.store$.select(selectInfoCharacter)
       .pipe(
         tap((character: Character | undefined) => {
           if(!character) {
@@ -54,10 +49,15 @@ export class InfoCharacterPageComponent implements OnInit {
       )
       .subscribe((item: Character | undefined) => {
         this.character = item;
-        this.breadcrumbs.push({ label: `${item?.name}`, });
+        this.breadcrumbs = [
+          { label: `${BaseUrl.MAIN}`, routerLink: `/` },
+          { label: `${BaseUrl.DETAILS}` },
+          { label: `${SearchedEntities.CHARACTERS}` },
+          { label: `${item?.name}` },
+        ];
+        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
         this.detectChange.markForCheck();
       });
-    this.detectChange.markForCheck();
   }
 }
 

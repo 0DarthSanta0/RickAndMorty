@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { HttpService } from "../../services/http/http.service";
 import { Character } from "../../shared/interfaces/character.interface";
 import { Store } from "@ngrx/store";
-import { doSearchRequest } from "../../shared/store/api.actions";
+import { doSearchRequest, loadCharacterInfo, loadEpisodeInfo, loadLocationInfo } from "../../shared/store/api.actions";
 import { selectAll } from "../../shared/store/api.selectors";
 import { Episode } from "../../shared/interfaces/episode.interface";
 import { Location } from "../../shared/interfaces/location.interface";
@@ -24,7 +24,7 @@ import { MenuItem } from "primeng/api";
   styleUrls: ['./main-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainPageComponent implements OnInit{
+export class MainPageComponent implements OnInit {
 
   private readonly COUNT_OF_CHARACTERS: number = 826;
 
@@ -44,7 +44,8 @@ export class MainPageComponent implements OnInit{
     private route: Router,
     private changeDetector: ChangeDetectorRef,
     private breadcrumbService: BreadcrumbService,
-    ) { }
+  ) {
+  }
 
   public ngOnInit() {
     this.getRandomIds();
@@ -67,9 +68,21 @@ export class MainPageComponent implements OnInit{
         this.results = result;
         this.changeDetector.markForCheck();
       });
+    this.changeDetector.markForCheck();
   }
 
   public select(event: SelectEvent): void {
+    switch (event.value.type) {
+      case SearchedEntities.CHARACTERS:
+        this.store$.dispatch(loadCharacterInfo({id: event.value.id}));
+        break;
+      case SearchedEntities.LOCATIONS:
+        this.store$.dispatch(loadLocationInfo({id: event.value.id}));
+        break;
+      case SearchedEntities.EPISODES:
+        this.store$.dispatch(loadEpisodeInfo({id: event.value.id}));
+        break;
+    }
     this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${event.value.type?.toLowerCase()}`, event.value.id]);
   }
 

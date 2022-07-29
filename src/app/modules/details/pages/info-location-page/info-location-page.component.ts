@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectLocation } from "../../../../shared/store/api.selectors";
+import { selectInfoLocation } from "../../../../shared/store/api.selectors";
 import { doSearchLocationRequest } from "../../../../shared/store/api.actions";
 import { Location } from "../../../../shared/interfaces/location.interface";
 import { tap } from "rxjs";
@@ -21,11 +21,7 @@ export class InfoLocationPageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  private readonly breadcrumbs: MenuItem[] = [
-    {label: `${BaseUrl.MAIN}`, routerLink: `/`},
-    {label: `${BaseUrl.DETAILS}`},
-    {label: `${SearchedEntities.LOCATIONS}`},
-  ];
+  private breadcrumbs: MenuItem[] = [];
 
   public location: Location | undefined;
 
@@ -42,11 +38,10 @@ export class InfoLocationPageComponent implements OnInit {
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectLocation(id);
-    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   private selectLocation(id: number): void {
-    this.store$.select(selectLocation(id))
+    this.store$.select(selectInfoLocation)
       .pipe(
         tap((location: Location | undefined) => {
           if (!location) {
@@ -57,12 +52,18 @@ export class InfoLocationPageComponent implements OnInit {
       )
       .subscribe((item: Location | undefined) => {
         this.location = item;
-        this.breadcrumbs.push({ label: `${item?.name}`, });
+        this.breadcrumbs = [
+          { label: `${BaseUrl.MAIN}`, routerLink: `/` },
+          { label: `${BaseUrl.DETAILS}` },
+          { label: `${SearchedEntities.LOCATIONS}` },
+          { label: `${item?.name}` },
+        ];
         let temp: number[] = [];
         this.location?.residents?.forEach((item) => {
           temp.push(Number(item.slice(this.ID_INDEX)));
         });
         this.charactersIds = temp;
+        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
         this.detectChange.markForCheck();
       });
   }
