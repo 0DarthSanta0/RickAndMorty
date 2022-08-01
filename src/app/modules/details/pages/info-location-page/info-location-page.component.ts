@@ -1,10 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Character } from "../../../../shared/interfaces/character.interface";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
-import { selectCharacter, selectLocation } from "../../../../shared/store/api.selectors";
-import { doSearchCharacterRequest, doSearchLocationRequest } from "../../../../shared/store/api.actions";
+import { selectInfoLocation } from "../../../../shared/store/api.selectors";
+import { doSearchLocationRequest } from "../../../../shared/store/api.actions";
 import { Location } from "../../../../shared/interfaces/location.interface";
+import { tap } from "rxjs";
+import { filter } from "rxjs/operators";
+import { BreadcrumbService } from "../../../../services/breadcrumb/breadcrumb.service";
+import { BaseUrl } from "../../../../shared/enums/base.url";
+import { SearchedEntities } from "../../../../shared/enums/searched.entities";
+import { MenuItem } from "primeng/api";
 
 @Component({
   selector: 'app-info-location-page',
@@ -16,31 +21,49 @@ export class InfoLocationPageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  public location: Location | null = null;
+  public location: Location | undefined;
 
   public charactersIds: number[] = [];
 
   constructor(
     private store$: Store,
-    private activateRoute: ActivatedRoute
-  ) { }
+    private activateRoute: ActivatedRoute,
+    private detectChange: ChangeDetectorRef,
+    private breadcrumbService: BreadcrumbService,
+  ) {
+  }
 
   ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
+    this.selectLocation(id);
+  }
 
-    this.store$.select(selectLocation(id)).subscribe((item: Location | undefined) => {
-      if (item) {
-        this.location = item;
-      } else {
-        this.store$.dispatch(doSearchLocationRequest({id: id}));
-        if(item) {
-          this.location = item;
-        }
-      }
-      this.location?.residents?.forEach((item) => {
-        this.charactersIds.push(Number(item.slice(this.ID_INDEX)));
+  private selectLocation(id: number): void {
+    this.store$.select(selectInfoLocation)
+      .pipe(
+        tap((location: Location | undefined) => {
+          if (!location) {
+            this.store$.dispatch(doSearchLocationRequest({id}))
+          }
+        }),
+        filter((location: Location | undefined) => !!location),
+      )
+      .subscribe((location: Location | undefined) => {
+        this.location = location;
+        const breadcrumbs: MenuItem[] = [
+          { label: `${BaseUrl.MAIN}`, routerLink: `/` },
+          { label: `${BaseUrl.DETAILS}` },
+          { label: `${SearchedEntities.LOCATIONS}` },
+          { label: `${location?.name}` },
+        ];
+        let locationList: number[] = [];
+        this.location?.residents?.forEach((resident) => {
+          locationList.push(Number(resident.slice(this.ID_INDEX)));
+        });
+        this.charactersIds = locationList;
+        this.breadcrumbService.setBreadcrumbs(breadcrumbs);
+        this.detectChange.markForCheck();
       });
-    });
   }
 
 }

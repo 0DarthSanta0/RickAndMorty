@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { HttpService } from "./services/http/http.service";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,10 @@ import { HttpService } from "./services/http/http.service";
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'RickAndMorty';
+export class AppComponent implements OnInit{
+
+  constructor() { }
+
+  ngOnInit() { }
 
 }

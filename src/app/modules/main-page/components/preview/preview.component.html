@@ -1,1 +1,8 @@
-<div class="value">{{essence?.name}}</div>
+<span class="value">{{essence?.name}}</span>
+<span class="preview" [style.visibility]="isHidden? 'hidden' : 'visible'">
+  <p>Name: {{essence?.name}}</p>
+  <p>Id: {{essence?.id}}</p>
+  <p *ngIf="type === 'Characters'">Status: {{essence?.status}}</p>
+  <p *ngIf="type === 'Episodes'">Air date: {{essence?.air_date}}</p>
+  <p *ngIf="type === 'Locations'">Type: {{essence?.type}}</p>
+</span>

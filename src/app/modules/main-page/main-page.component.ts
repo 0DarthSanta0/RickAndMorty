@@ -2,19 +2,21 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { HttpService } from "../../services/http/http.service";
 import { Character } from "../../shared/interfaces/character.interface";
 import { Store } from "@ngrx/store";
-import { doSearchRequest } from "../../shared/store/api.actions";
+import { doSearchRequest, loadCharacterInfo, loadEpisodeInfo, loadLocationInfo } from "../../shared/store/api.actions";
 import { selectAll } from "../../shared/store/api.selectors";
 import { Episode } from "../../shared/interfaces/episode.interface";
 import { Location } from "../../shared/interfaces/location.interface";
-import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event";
+import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event.interface";
 import { map } from "rxjs";
-import { ResultsData } from "../../shared/interfaces/results.data";
+import { ResultsData } from "../../shared/interfaces/results.data.interface";
 import { SearchData } from "../../shared/interfaces/search.data.interface";
 import { SearchedEntities } from "../../shared/enums/searched.entities";
 import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
-import { BaseEssence } from "../../shared/interfaces/base.essence";
 import { Router } from "@angular/router";
-import { SelectEvent } from "../../shared/interfaces/select.event";
+import { SelectEvent } from "../../shared/interfaces/select.event.interface";
+import { BreadcrumbService } from "../../services/breadcrumb/breadcrumb.service";
+import { BaseUrl } from 'src/app/shared/enums/base.url';
+import { MenuItem } from "primeng/api";
 
 @Component({
   selector: 'app-main-page',
@@ -22,11 +24,14 @@ import { SelectEvent } from "../../shared/interfaces/select.event";
   styleUrls: ['./main-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainPageComponent implements OnInit{
+export class MainPageComponent implements OnInit {
 
   private readonly COUNT_OF_CHARACTERS: number = 826;
 
-  title = 'RickAndMorty';
+  private readonly breadcrumbs: MenuItem[] = [
+    {label: `${BaseUrl.MAIN}`, url: undefined},
+  ];
+
   text: string = '';
 
   public results: ResultsData[] = [];
@@ -38,12 +43,13 @@ export class MainPageComponent implements OnInit{
     private store$: Store,
     private route: Router,
     private changeDetector: ChangeDetectorRef,
-    ) { }
+    private breadcrumbService: BreadcrumbService,
+  ) {
+  }
 
   public ngOnInit() {
-    for (let i = 0; i < 21; ++i) {
-      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
-    }
+    this.getRandomIds();
+    this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
   }
 
   public search(event: AutocompleteEvent): void {
@@ -60,12 +66,24 @@ export class MainPageComponent implements OnInit{
       )
       .subscribe((result: ResultsData[]) => {
         this.results = result;
-        this.changeDetector.detectChanges();
+        this.changeDetector.markForCheck();
       });
+    this.changeDetector.markForCheck();
   }
 
   public select(event: SelectEvent): void {
-    this.route.navigate([`/details/${event.value.type?.toLowerCase()}`, event.value.id]);
+    switch (event.value.type) {
+      case SearchedEntities.CHARACTERS:
+        this.store$.dispatch(loadCharacterInfo({id: event.value.id}));
+        break;
+      case SearchedEntities.LOCATIONS:
+        this.store$.dispatch(loadLocationInfo({id: event.value.id}));
+        break;
+      case SearchedEntities.EPISODES:
+        this.store$.dispatch(loadEpisodeInfo({id: event.value.id}));
+        break;
+    }
+    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${event.value.type?.toLowerCase()}`, event.value.id]);
   }
 
   private buildEntity(key: SearchedEntities, data: Character[] | Location[] | Episode[]): ResultsData {
@@ -80,6 +98,12 @@ export class MainPageComponent implements OnInit{
         },
       })),
     };
+  }
+
+  private getRandomIds(): void {
+    for (let i = 0; i < 21; ++i) {
+      this.charactersIds.push(Math.floor(Math.random() * (this.COUNT_OF_CHARACTERS + 1)));
+    }
   }
 
 }

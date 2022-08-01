@@ -1,16 +1,19 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, forkJoin, map, mergeMap, of, switchMap } from "rxjs";
+import { catchError, forkJoin, map, mergeMap, of } from "rxjs";
 import {
   doSearchCharacterRequest,
   doSearchCharacterRequestFail,
   doSearchCharacterRequestSuccess,
-  doSearchEpisodeRequest, doSearchEpisodeRequestFail, doSearchEpisodeRequestSuccess,
+  doSearchEpisodeRequest,
+  doSearchEpisodeRequestFail,
+  doSearchEpisodeRequestSuccess,
   doSearchLocationRequest,
   doSearchLocationRequestFail,
   doSearchLocationRequestSuccess,
   doSearchMultipleCharactersRequest,
-  doSearchMultipleCharactersRequestFail, doSearchMultipleCharactersRequestSuccess,
+  doSearchMultipleCharactersRequestFail,
+  doSearchMultipleCharactersRequestSuccess,
   doSearchRequest,
   doSearchRequestFail,
   doSearchRequestSuccess
@@ -42,12 +45,12 @@ export class GeneralEffects {
         return forkJoin([charactersTemp, locationTemp, episodesTemp]);
       }),
       map(([charactersResponse, locationResponse, episodesResponse]) => doSearchRequestSuccess(
-          {
-            characters: charactersResponse?.results || [],
-            locations: locationResponse?.results || [],
-            episodes: episodesResponse?.results || [],
-          }
-        )),
+        {
+          characters: charactersResponse?.results || [],
+          locations: locationResponse?.results || [],
+          episodes: episodesResponse?.results || [],
+        }
+      )),
       catchError(err => of(doSearchRequestFail())),
     )
   );
@@ -56,10 +59,10 @@ export class GeneralEffects {
       ofType(doSearchCharacterRequest),
       mergeMap(action => this.httpService.searchCharacterById(action.id)),
       map((charactersResponse: Character) => doSearchCharacterRequestSuccess(
-          {
-            characters: [charactersResponse],
-          }
-        )),
+        {
+          character: charactersResponse,
+        }
+      )),
       catchError(err => of(doSearchCharacterRequestFail))
     )
   );
@@ -68,10 +71,10 @@ export class GeneralEffects {
       ofType(doSearchLocationRequest),
       mergeMap(action => this.httpService.searchLocationById(action.id)),
       map((locationResponse: Location) => doSearchLocationRequestSuccess(
-          {
-            locations: [locationResponse],
-          }
-        )),
+        {
+          location: locationResponse,
+        }
+      )),
       catchError(err => of(doSearchLocationRequestFail))
     )
   );
@@ -80,9 +83,9 @@ export class GeneralEffects {
       ofType(doSearchEpisodeRequest),
       mergeMap(action => this.httpService.searchEpisodeById(action.id)),
       map((episodeResponse: Episode) => doSearchEpisodeRequestSuccess(
-          {
-            episodes: [episodeResponse],
-          })
+        {
+          episode: episodeResponse,
+        })
       ),
       catchError(err => of(doSearchEpisodeRequestFail))
     )
@@ -93,9 +96,9 @@ export class GeneralEffects {
       ofType(doSearchMultipleCharactersRequest),
       mergeMap(action => this.httpService.searchMultipleCharacters(action.id)),
       map((charactersResponse: Character[]) => doSearchMultipleCharactersRequestSuccess(
-          {
-            characters: charactersResponse,
-          })
+        {
+          characters: charactersResponse,
+        })
       ),
       catchError(err => of(doSearchMultipleCharactersRequestFail))
     )

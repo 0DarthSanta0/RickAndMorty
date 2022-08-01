@@ -1,8 +1,17 @@
+:root
+{
+  --main-color: #1AB8ED;
+  --blur-color: #C0FF96;
+  --back-color: #FFFFF0;
+}
+
 html {
   height: 100%;
   width: 100%;
-  background-color: white;
-  font-family: 'Roboto', sans-serif;
+  background-color: var(--back-color);
+  text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color);
+  color: var(--main-color);
+  font-family: 'Lato', sans-serif;
   font-size: 14px;
   margin: 0;
 }
