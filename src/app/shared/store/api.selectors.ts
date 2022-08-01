@@ -14,15 +14,15 @@ export const selectAll = createSelector(createFeatureSelector('app'), (state: Ge
 });
 
 export const selectCharacter = (id: number) => createSelector(createFeatureSelector('app'), (state: GeneralState) : Character | undefined => {
-  return state.characters.find(item => item.id === id);
+  return state.characters.find(character => character.id === id);
 });
 
 export const selectLocation = (id: number) => createSelector(createFeatureSelector('app'), (state: GeneralState) : Location | undefined => {
-  return state.locations.find(item => item.id === id);
+  return state.locations.find(location => location.id === id);
 });
 
 export const selectEpisode = (id: number) => createSelector(createFeatureSelector('app'), (state: GeneralState) : Episode | undefined => {
-  return state.episodes.find(item => item.id === id);
+  return state.episodes.find(episode => episode.id === id);
 });
 
 export const selectInfoCharacter = createSelector(createFeatureSelector('app'), (state: GeneralState) : Character | undefined => {

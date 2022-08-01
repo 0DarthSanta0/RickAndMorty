@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,12 +17,15 @@ import { CharactersCarouselModule } from "./shared/components/characters-carouse
 import { TooltipModule } from "primeng/tooltip";
 import { CacheInterceptor } from "./shared/interceptors/cache.interceptor";
 import { BreadcrumbModule } from "primeng/breadcrumb";
+import { BreadcrumbComponent } from './shared/components/breadcrumb/breadcrumb.component';
+import { clearDataInitializer } from "./shared/utils/clear-data.initializer";
 
 @NgModule({
   declarations: [
     AppComponent,
     MainPageComponent,
     PreviewComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     HttpClientModule,
@@ -43,6 +46,11 @@ import { BreadcrumbModule } from "primeng/breadcrumb";
       provide: HTTP_INTERCEPTORS,
       multi: true,
       useClass: CacheInterceptor,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: clearDataInitializer,
+      multi: true,
     }
   ],
   bootstrap: [AppComponent]

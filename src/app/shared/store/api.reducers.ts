@@ -58,25 +58,25 @@ export const generalReducer = createReducer(
   on(loadCharacterInfo, (state: GeneralState, {id}) => {
     return {
       ...state,
-      infoCharacter: state.characters.find(item => item.id === id),
+      infoCharacter: state.characters.find(character => character.id === id),
     }
   }),
   on(loadLocationInfo, (state: GeneralState, {id}) => {
     return {
       ...state,
-      infoLocation: state.locations.find(item => item.id === id),
+      infoLocation: state.locations.find(location => location.id === id),
     }
   }),
   on(loadEpisodeInfo, (state: GeneralState, {id}) => {
     return {
       ...state,
-      infoEpisode: state.episodes.find(item => item.id === id),
+      infoEpisode: state.episodes.find(episode => episode.id === id),
     }
   }),
   on(loadCarouselCharacterInfo, (state: GeneralState, {id}) => {
     return {
       ...state,
-      infoCharacter: state.carouselCharacters.find(item => item.id === id),
+      infoCharacter: state.carouselCharacters.find(character => character.id === id),
     }
   })
 )

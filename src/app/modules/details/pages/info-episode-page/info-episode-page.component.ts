@@ -21,8 +21,6 @@ export class InfoEpisodePageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  private breadcrumbs: MenuItem[] = [];
-
   public episode: Episode | undefined;
 
   public charactersIds: number[] = [];
@@ -49,20 +47,20 @@ export class InfoEpisodePageComponent implements OnInit {
         }),
         filter((episode: Episode | undefined) => !!episode),
       )
-      .subscribe((item: Episode | undefined) => {
-        this.episode = item;
-        this.breadcrumbs = [
+      .subscribe((episode: Episode | undefined) => {
+        this.episode = episode;
+        const breadcrumbs = [
           { label: `${BaseUrl.MAIN}`, routerLink: `/` },
           { label: `${BaseUrl.DETAILS}` },
           { label: `${SearchedEntities.EPISODES}` },
-          { label: `${item?.name}` },
+          { label: `${episode?.name}` },
         ];
-        let temp: number[] = [];
-        this.episode?.characters?.forEach((item) => {
-          temp.push(Number(item.slice(this.ID_INDEX)));
+        let episodeList: number[] = [];
+        this.episode?.characters?.forEach((character) => {
+          episodeList.push(Number(character.slice(this.ID_INDEX)));
         });
-        this.charactersIds = temp;
-        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
+        this.charactersIds = episodeList;
+        this.breadcrumbService.setBreadcrumbs(breadcrumbs);
         this.detectChange.markForCheck();
       });
   }

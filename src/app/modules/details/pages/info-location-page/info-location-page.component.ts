@@ -21,8 +21,6 @@ export class InfoLocationPageComponent implements OnInit {
 
   private readonly ID_INDEX: number = 42;
 
-  private breadcrumbs: MenuItem[] = [];
-
   public location: Location | undefined;
 
   public charactersIds: number[] = [];
@@ -50,20 +48,20 @@ export class InfoLocationPageComponent implements OnInit {
         }),
         filter((location: Location | undefined) => !!location),
       )
-      .subscribe((item: Location | undefined) => {
-        this.location = item;
-        this.breadcrumbs = [
+      .subscribe((location: Location | undefined) => {
+        this.location = location;
+        const breadcrumbs: MenuItem[] = [
           { label: `${BaseUrl.MAIN}`, routerLink: `/` },
           { label: `${BaseUrl.DETAILS}` },
           { label: `${SearchedEntities.LOCATIONS}` },
-          { label: `${item?.name}` },
+          { label: `${location?.name}` },
         ];
-        let temp: number[] = [];
-        this.location?.residents?.forEach((item) => {
-          temp.push(Number(item.slice(this.ID_INDEX)));
+        let locationList: number[] = [];
+        this.location?.residents?.forEach((resident) => {
+          locationList.push(Number(resident.slice(this.ID_INDEX)));
         });
-        this.charactersIds = temp;
-        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
+        this.charactersIds = locationList;
+        this.breadcrumbService.setBreadcrumbs(breadcrumbs);
         this.detectChange.markForCheck();
       });
   }

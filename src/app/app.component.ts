@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { BreadcrumbService } from "./services/breadcrumb/breadcrumb.service";
-import { MenuItem } from "primeng/api";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -9,19 +8,9 @@ import { MenuItem } from "primeng/api";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit{
-  public breadcrumbs: MenuItem[] = [];
 
-  constructor(
-    private breadcrumbsService: BreadcrumbService,
-    private cdr: ChangeDetectorRef,
-  ) {
-  }
+  constructor() { }
 
-  ngOnInit() {
-    this.breadcrumbsService.getBreadcrumbs$().subscribe(breadcrumbs => {
-      this.breadcrumbs = breadcrumbs;
-      this.cdr.markForCheck();
-    });
-  }
+  ngOnInit() { }
 
 }

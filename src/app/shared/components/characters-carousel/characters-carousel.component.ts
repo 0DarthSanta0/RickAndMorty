@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Character } from "../../interfaces/character.interface";
 import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
@@ -13,9 +13,9 @@ import { BaseUrl } from "../../enums/base.url";
   styleUrls: ['./characters-carousel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharactersCarouselComponent implements OnInit {
+export class CharactersCarouselComponent implements OnInit, OnChanges {
 
-  @Input() public charactersIds: number[] = [1,2];
+  @Input() public charactersIds: number[] = [];
 
   public characters: Character[] = [];
 
@@ -25,14 +25,19 @@ export class CharactersCarouselComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
   ) { }
 
+  ngOnChanges(): void {
+    if (this.charactersIds.length) {
+      this.store$.dispatch(doSearchMultipleCharactersRequest({id: this.charactersIds}));
+    }
+  }
+
   ngOnInit(): void {
-    this.store$.dispatch(doSearchMultipleCharactersRequest({id: this.charactersIds}));
     this.selectCharacters();
   };
 
   public onClick(id: number) {
     this.store$.dispatch(loadCarouselCharacterInfo({id}));
-    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${SearchedEntities.CHARACTERS.toLowerCase()}`, id]).then();
+    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${SearchedEntities.CHARACTERS.toLowerCase()}`, id]);
   }
 
   private selectCharacters(): void {

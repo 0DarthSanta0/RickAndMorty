@@ -20,14 +20,12 @@ import { SearchedEntities } from "../../../../shared/enums/searched.entities";
 
 export class InfoCharacterPageComponent implements OnInit {
 
-  private breadcrumbs: MenuItem[] = [];
-
   public character: Character | undefined;
 
   constructor(
     private store$: Store,
     private activateRoute: ActivatedRoute,
-    private detectChange: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
     private breadcrumbService: BreadcrumbService,
   ) {
   }
@@ -47,16 +45,16 @@ export class InfoCharacterPageComponent implements OnInit {
         }),
         filter((character: Character | undefined) => !!character),
       )
-      .subscribe((item: Character | undefined) => {
-        this.character = item;
-        this.breadcrumbs = [
+      .subscribe((character: Character | undefined) => {
+        this.character = character;
+        const breadcrumbs: MenuItem[] = [
           { label: `${BaseUrl.MAIN}`, routerLink: `/` },
           { label: `${BaseUrl.DETAILS}` },
           { label: `${SearchedEntities.CHARACTERS}` },
-          { label: `${item?.name}` },
+          { label: `${character?.name}` },
         ];
-        this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
-        this.detectChange.markForCheck();
+        this.breadcrumbService.setBreadcrumbs(breadcrumbs);
+        this.cdr.markForCheck();
       });
   }
 }
