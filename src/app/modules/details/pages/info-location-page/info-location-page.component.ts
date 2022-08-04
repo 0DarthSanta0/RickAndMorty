@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { ActivatedRoute } from "@angular/router";
-import { selectInfoLocation } from "../../../../shared/store/api.selectors";
-import { doSearchLocationRequest } from "../../../../shared/store/api.actions";
-import { Location } from "../../../../shared/interfaces/location.interface";
-import { tap } from "rxjs";
-import { filter } from "rxjs/operators";
-import { BreadcrumbService } from "../../../../services/breadcrumb/breadcrumb.service";
-import { BaseUrl } from "../../../../shared/enums/base.url";
-import { SearchedEntities } from "../../../../shared/enums/searched.entities";
-import { MenuItem } from "primeng/api";
+import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
+import { selectInfoLocation } from '../../../../shared/store/api.selectors';
+import { doSearchLocationRequest } from '../../../../shared/store/api.actions';
+import { Location } from '../../../../shared/interfaces/location.interface';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { BreadcrumbService } from '../../../../services/breadcrumb/breadcrumb.service';
+import { BaseUrl } from '../../../../shared/enums/base.url';
+import { SearchedEntities } from '../../../../shared/enums/searched.entities';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-info-location-page',
@@ -19,11 +19,13 @@ import { MenuItem } from "primeng/api";
 })
 export class InfoLocationPageComponent implements OnInit {
 
-  private readonly ID_INDEX: number = 42;
-
   public location: Location | undefined;
 
   public charactersIds: number[] = [];
+
+  private readonly ID_INDEX: number = 42;
+
+  private destroySubject$: Subject<void> = new Subject<void>();
 
   constructor(
     private store$: Store,
@@ -33,9 +35,14 @@ export class InfoLocationPageComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     let id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectLocation(id);
+  }
+
+  public ngOnDestroy(): void {
+    this.destroySubject$.next();
+    this.destroySubject$.complete();
   }
 
   private selectLocation(id: number): void {
@@ -47,6 +54,7 @@ export class InfoLocationPageComponent implements OnInit {
           }
         }),
         filter((location: Location | undefined) => !!location),
+        takeUntil(this.destroySubject$),
       )
       .subscribe((location: Location | undefined) => {
         this.location = location;

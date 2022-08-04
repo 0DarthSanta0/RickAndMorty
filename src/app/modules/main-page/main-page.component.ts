@@ -1,22 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { HttpService } from "../../services/http/http.service";
-import { Character } from "../../shared/interfaces/character.interface";
-import { Store } from "@ngrx/store";
-import { doSearchRequest, loadCharacterInfo, loadEpisodeInfo, loadLocationInfo } from "../../shared/store/api.actions";
-import { selectAll } from "../../shared/store/api.selectors";
-import { Episode } from "../../shared/interfaces/episode.interface";
-import { Location } from "../../shared/interfaces/location.interface";
-import { AutocompleteEvent } from "../../shared/interfaces/autocomplete.event.interface";
-import { map } from "rxjs";
-import { ResultsData } from "../../shared/interfaces/results.data.interface";
-import { SearchData } from "../../shared/interfaces/search.data.interface";
-import { SearchedEntities } from "../../shared/enums/searched.entities";
-import { SEARCHED_ENTITIES_CONFIG } from "../../shared/constants/searched.entities.config";
-import { Router } from "@angular/router";
-import { SelectEvent } from "../../shared/interfaces/select.event.interface";
-import { BreadcrumbService } from "../../services/breadcrumb/breadcrumb.service";
+import { HttpService } from '../../services/http/http.service';
+import { Character } from '../../shared/interfaces/character.interface';
+import { Store } from '@ngrx/store';
+import { doSearchRequest, loadCharacterInfo, loadEpisodeInfo, loadLocationInfo } from '../../shared/store/api.actions';
+import { selectAll } from '../../shared/store/api.selectors';
+import { Episode } from '../../shared/interfaces/episode.interface';
+import { Location } from '../../shared/interfaces/location.interface';
+import { AutocompleteEvent } from '../../shared/interfaces/autocomplete.event.interface';
+import { map, Subject, takeUntil } from 'rxjs';
+import { ResultsData } from '../../shared/interfaces/results.data.interface';
+import { SearchData } from '../../shared/interfaces/search.data.interface';
+import { SearchedEntities } from '../../shared/enums/searched.entities';
+import { SEARCHED_ENTITIES_CONFIG } from '../../shared/constants/searched.entities.config';
+import { Router } from '@angular/router';
+import { SelectEvent } from '../../shared/interfaces/select.event.interface';
+import { BreadcrumbService } from '../../services/breadcrumb/breadcrumb.service';
 import { BaseUrl } from 'src/app/shared/enums/base.url';
-import { MenuItem } from "primeng/api";
+import { MenuItem } from 'primeng/api';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-main-page',
@@ -26,17 +27,21 @@ import { MenuItem } from "primeng/api";
 })
 export class MainPageComponent implements OnInit {
 
+  public form = this.fb.group({
+    autoComplete: [''],
+  });
+
+  public results: ResultsData[] = [];
+
+  public charactersIds: number[] = [];
+
   private readonly COUNT_OF_CHARACTERS: number = 826;
 
   private readonly breadcrumbs: MenuItem[] = [
     {label: `${BaseUrl.MAIN}`, url: undefined},
   ];
 
-  text: string = '';
-
-  public results: ResultsData[] = [];
-
-  public charactersIds: number[] = [];
+  private destroySubject$: Subject<void> = new Subject<void>();
 
   constructor(
     private httpService: HttpService,
@@ -44,12 +49,18 @@ export class MainPageComponent implements OnInit {
     private route: Router,
     private changeDetector: ChangeDetectorRef,
     private breadcrumbService: BreadcrumbService,
+    private fb: FormBuilder,
   ) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getRandomIds();
     this.breadcrumbService.setBreadcrumbs(this.breadcrumbs);
+  }
+
+  public ngOnDestroy(): void {
+    this.destroySubject$.next();
+    this.destroySubject$.complete();
   }
 
   public search(event: AutocompleteEvent): void {
@@ -63,6 +74,7 @@ export class MainPageComponent implements OnInit {
             this.buildEntity(SearchedEntities.EPISODES, data.episodes),
           ]
         }),
+        takeUntil(this.destroySubject$),
       )
       .subscribe((result: ResultsData[]) => {
         this.results = result;
@@ -84,6 +96,10 @@ export class MainPageComponent implements OnInit {
         break;
     }
     this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/${event.value.type?.toLowerCase()}`, event.value.id]);
+  }
+
+  public toControls(): void {
+    this.route.navigate([`/${BaseUrl.DETAILS.toLowerCase()}/controls`]);
   }
 
   private buildEntity(key: SearchedEntities, data: Character[] | Location[] | Episode[]): ResultsData {

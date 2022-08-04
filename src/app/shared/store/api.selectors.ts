@@ -1,9 +1,9 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { GeneralState } from "../interfaces/general.state.interface";
-import { SearchData } from "../interfaces/search.data.interface";
-import { Character } from "../interfaces/character.interface";
-import { Location } from "../interfaces/location.interface";
-import { Episode } from "../interfaces/episode.interface";
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { GeneralState } from '../interfaces/general.state.interface';
+import { SearchData } from '../interfaces/search.data.interface';
+import { Character } from '../interfaces/character.interface';
+import { Location } from '../interfaces/location.interface';
+import { Episode } from '../interfaces/episode.interface';
 
 export const selectAll = createSelector(createFeatureSelector('app'), (state: GeneralState) : SearchData => {
   return {

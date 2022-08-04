@@ -1,7 +1,7 @@
-import { createAction, props } from "@ngrx/store";
-import { Character } from "../interfaces/character.interface";
-import { Episode } from "../interfaces/episode.interface";
-import { Location } from "../interfaces/location.interface";
+import { createAction, props } from '@ngrx/store';
+import { Character } from '../interfaces/character.interface';
+import { Episode } from '../interfaces/episode.interface';
+import { Location } from '../interfaces/location.interface';
 
 export const doSearchRequest = createAction('[API] search request', props<{url: string}>());
 

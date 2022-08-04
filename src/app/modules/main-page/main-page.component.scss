@@ -45,11 +45,11 @@
       text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color),0 0 30px var(--blur-color);
       color: var(--main-color);
       border-radius: 2rem;
+      padding: 0 1.5rem;
     }
     input{
       width: 30rem;
       height: 3rem;
-      padding: 0 1rem;
     }
   }
 }
@@ -65,5 +65,13 @@
 .main-image {
   position: absolute;
   z-index: -1;
+}
 
+.controls {
+  border-radius: 1rem;
+  border: 0;
+  background-color: var(--blur-color);
+  color: var(--main-color);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
 }

@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { Character } from "../../../../shared/interfaces/character.interface";
-import { selectInfoCharacter } from "../../../../shared/store/api.selectors";
-import { ActivatedRoute } from "@angular/router";
-import { doSearchCharacterRequest } from "../../../../shared/store/api.actions";
-import { tap } from "rxjs";
-import { filter } from "rxjs/operators";
-import { BreadcrumbService } from "../../../../services/breadcrumb/breadcrumb.service";
-import { MenuItem } from "primeng/api";
-import { BaseUrl } from "../../../../shared/enums/base.url";
-import { SearchedEntities } from "../../../../shared/enums/searched.entities";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Character } from '../../../../shared/interfaces/character.interface';
+import { selectInfoCharacter } from '../../../../shared/store/api.selectors';
+import { ActivatedRoute } from '@angular/router';
+import { doSearchCharacterRequest } from '../../../../shared/store/api.actions';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { BreadcrumbService } from '../../../../services/breadcrumb/breadcrumb.service';
+import { MenuItem } from 'primeng/api';
+import { BaseUrl } from '../../../../shared/enums/base.url';
+import { SearchedEntities } from '../../../../shared/enums/searched.entities';
 
 @Component({
   selector: 'app-info-character-page',
@@ -18,9 +18,11 @@ import { SearchedEntities } from "../../../../shared/enums/searched.entities";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class InfoCharacterPageComponent implements OnInit {
+export class InfoCharacterPageComponent implements OnInit, OnDestroy {
 
   public character: Character | undefined;
+
+  private destroySubject$: Subject<void> = new Subject<void>();
 
   constructor(
     private store$: Store,
@@ -30,9 +32,14 @@ export class InfoCharacterPageComponent implements OnInit {
   ) {
   }
 
-  ngOnInit(): void {
-    let id: number = Number(this.activateRoute.snapshot.params['id']);
+  public ngOnInit(): void {
+    const id: number = Number(this.activateRoute.snapshot.params['id']);
     this.selectCharacter(id);
+  }
+
+  public ngOnDestroy(): void {
+    this.destroySubject$.next();
+    this.destroySubject$.complete();
   }
 
   private selectCharacter(id: number): void {
@@ -44,6 +51,7 @@ export class InfoCharacterPageComponent implements OnInit {
           }
         }),
         filter((character: Character | undefined) => !!character),
+        takeUntil(this.destroySubject$),
       )
       .subscribe((character: Character | undefined) => {
         this.character = character;

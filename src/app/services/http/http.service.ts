@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { Filter } from "../../shared/interfaces/filter.interface";
-import { Character } from "../../shared/interfaces/character.interface";
-import { Location } from "../../shared/interfaces/location.interface";
-import { Episode } from "../../shared/interfaces/episode.interface";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Filter } from '../../shared/interfaces/filter.interface';
+import { Character } from '../../shared/interfaces/character.interface';
+import { Location } from '../../shared/interfaces/location.interface';
+import { Episode } from '../../shared/interfaces/episode.interface';
 
 @Injectable({
   providedIn: 'root',

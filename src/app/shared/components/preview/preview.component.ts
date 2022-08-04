@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Character } from "../../../../shared/interfaces/character.interface";
-import { Episode } from "../../../../shared/interfaces/episode.interface";
-import { Location } from "../../../../shared/interfaces/location.interface";
-import { fromEvent, Observable } from "rxjs";
+import { Character } from '../../interfaces/character.interface';
+import { Episode } from '../../interfaces/episode.interface';
+import { Location } from '../../interfaces/location.interface';
+import { fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-preview',
@@ -18,23 +18,40 @@ export class PreviewComponent implements OnInit {
 
   public isHidden = true;
 
+  private destroySubject$: Subject<void> = new Subject<void>();
+
   constructor(
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {
+  }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const element = document.getElementById(`${this.type}${this.essence?.id}`)
-    if(element) {
+    if (element) {
       const enteredElement$: Observable<MouseEvent> = fromEvent<MouseEvent>(element, 'mouseenter');
-      enteredElement$.subscribe(() => {
-        this.isHidden = false;
-        this.cdr.markForCheck();
-      });
+      enteredElement$
+        .pipe(
+          takeUntil(this.destroySubject$),
+        )
+        .subscribe(() => {
+          this.isHidden = false;
+          this.cdr.markForCheck();
+        });
       const outElement$: Observable<MouseEvent> = fromEvent<MouseEvent>(element, 'mouseleave');
-      outElement$.subscribe(() => {
-        this.isHidden = true;
-        this.cdr.markForCheck();
-      });
+      outElement$
+        .pipe(
+          takeUntil(this.destroySubject$),
+        )
+        .subscribe(() => {
+          this.isHidden = true;
+          this.cdr.markForCheck();
+        });
     }
   }
+
+  public ngOnDestroy(): void {
+    this.destroySubject$.next();
+    this.destroySubject$.complete();
+  }
+
 }

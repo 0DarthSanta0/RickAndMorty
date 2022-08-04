@@ -1,4 +1,4 @@
-import { createReducer, on } from "@ngrx/store";
+import { createReducer, on } from '@ngrx/store';
 import {
   loadCharacterInfo,
   loadEpisodeInfo,
@@ -8,8 +8,8 @@ import {
   doSearchLocationRequestSuccess,
   doSearchMultipleCharactersRequestSuccess,
   doSearchRequestSuccess, loadCarouselCharacterInfo
-} from "./api.actions";
-import { GeneralState } from "../interfaces/general.state.interface";
+} from './api.actions';
+import { GeneralState } from '../interfaces/general.state.interface';
 
 export const initialState: GeneralState = {
   characters: [],

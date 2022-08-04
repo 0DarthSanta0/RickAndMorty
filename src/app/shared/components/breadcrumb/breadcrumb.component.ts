@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { BreadcrumbService } from "../../../services/breadcrumb/breadcrumb.service";
-import { Observable, of } from "rxjs";
-import { MenuItem } from "primeng/api";
+import { BreadcrumbService } from '../../../services/breadcrumb/breadcrumb.service';
+import { Observable, of } from 'rxjs';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -17,7 +17,7 @@ export class BreadcrumbComponent implements OnInit {
     private breadcrumbsService: BreadcrumbService,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.breadcrumbs$ = this.breadcrumbsService.getBreadcrumbs$();
   }
 

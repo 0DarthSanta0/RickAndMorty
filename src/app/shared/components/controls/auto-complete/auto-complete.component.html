@@ -1,0 +1,23 @@
+<label> {{label}}
+  <p-autoComplete
+    [group]="true"
+    [formControl]="control"
+    [required]="isRequired"
+    [placeholder]="placeholder"
+    [suggestions]="suggestions"
+    (completeMethod)="onComplete($event)"
+    (onSelect)="onSelect($event)"
+    field="label">
+    <ng-template let-item pTemplate="item">
+      <div>
+        <app-preview [essence]="item.value.essence" [type]="item.value.type" id="{{item.value.type}}{{item.value.id}}"></app-preview>
+      </div>
+    </ng-template>
+    <ng-template let-group pTemplate="group">
+      <div class="flex align-items-center">
+        <span>{{group.label}}</span>
+      </div>
+    </ng-template>
+  </p-autoComplete>
+</label>
+{{error}}

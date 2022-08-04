@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, forkJoin, map, mergeMap, of } from "rxjs";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, forkJoin, map, mergeMap, of } from 'rxjs';
 import {
   doSearchCharacterRequest,
   doSearchCharacterRequestFail,
@@ -17,11 +17,11 @@ import {
   doSearchRequest,
   doSearchRequestFail,
   doSearchRequestSuccess
-} from "./api.actions";
-import { HttpService } from "../../services/http/http.service";
-import { Character } from "../interfaces/character.interface";
-import { Location } from "../interfaces/location.interface";
-import { Episode } from "../interfaces/episode.interface";
+} from './api.actions';
+import { HttpService } from '../../services/http/http.service';
+import { Character } from '../interfaces/character.interface';
+import { Location } from '../interfaces/location.interface';
+import { Episode } from '../interfaces/episode.interface';
 
 
 @Injectable()
