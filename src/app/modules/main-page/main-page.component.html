@@ -1,17 +1,10 @@
 <div class="logo-div">Rick And Morty</div>
 <div class="center-element">
-  <p-autoComplete [(ngModel)]="text" [group]="true" [suggestions]="results" (completeMethod)="search($event)"
-                  field="label" (onSelect)="select($event)">
-    <ng-template let-item pTemplate="item">
-      <div>
-        <app-preview [essence]="item.value.essence" [type]="item.value.type"></app-preview>
-      </div>
-    </ng-template>
-    <ng-template let-group pTemplate="group">
-      <div class="flex align-items-center">
-        <span>{{group.label}}</span>
-      </div>
-    </ng-template>
-  </p-autoComplete>
+  <form [formGroup]="form">
+    <app-auto-complete formControlName="autoComplete" [suggestions]="results" (completeMethod)="search($event)" (selectMethod)="select($event)"></app-auto-complete>
+  </form>
 </div>
 <app-characters-carousel class="random-carousel" [charactersIds]="charactersIds"></app-characters-carousel>
+<button (click)="toControls()" class="controls">To controls</button>
+
+

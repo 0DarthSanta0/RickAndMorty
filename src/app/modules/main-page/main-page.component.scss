@@ -17,16 +17,61 @@
   flex: 2.5;
 }
 
-::ng-deep p-autocomplete input{
-  width: 20rem;
-  height: 2rem;
-  border-radius: 2rem;
-  padding: 0 1rem;
+::ng-deep {
+  p-autocomplete {
+    ::-webkit-scrollbar {
+      width: 0;
+    }
+    .p-autocomplete-panel {
+      background-color: var(--back-color);
+      .p-autocomplete-items {
+        .p-autocomplete-item-group {
+          color: var(--main-color);
+          font-size: 1.5rem;
+          background-color: #E6FFFF;
+        }
+        .p-autocomplete-item {
+          color: var(--main-color);
+        }
+      }
+    }
+    .p-autocomplete-item-group {
+      color: var(--main-color);
+    }
+    .p-autocomplete-panel {
+      border-radius: 2rem;
+    }
+    .p-inputtext {
+      text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color),0 0 30px var(--blur-color);
+      color: var(--main-color);
+      border-radius: 2rem;
+      padding: 0 1.5rem;
+    }
+    input{
+      width: 30rem;
+      height: 3rem;
+    }
+  }
 }
 
 .logo-div {
-  font-size: 2rem;
+  text-shadow: 0 0 10px var(--blur-color),0 0 20px var(--blur-color),0 0 30px var(--blur-color);
+  color: var(--main-color);
+  font-size: 4rem;
   font-family: "Berlin Sans FB";
   padding: 2rem 0;
 }
 
+.main-image {
+  position: absolute;
+  z-index: -1;
+}
+
+.controls {
+  border-radius: 1rem;
+  border: 0;
+  background-color: var(--blur-color);
+  color: var(--main-color);
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}

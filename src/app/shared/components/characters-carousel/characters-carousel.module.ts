@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CharactersCarouselComponent } from './characters-carousel/characters-carousel.component';
-import { CarouselModule } from "primeng/carousel";
-
-
+import { CharactersCarouselComponent } from './characters-carousel.component';
+import { CarouselModule } from 'primeng/carousel';
 
 @NgModule({
   declarations: [

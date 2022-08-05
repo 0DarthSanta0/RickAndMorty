@@ -6,6 +6,8 @@ export interface GeneralState {
   characters: Character[],
   locations: Location[],
   episodes: Episode[],
-  charactersForCarousel: Character[],
-  essenceForInfo: Character | Location | Episode | null,
+  carouselCharacters: Character[],
+  infoCharacter: Character | undefined,
+  infoLocation: Location | undefined,
+  infoEpisode: Episode | undefined,
 }

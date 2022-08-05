@@ -1,11 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Store } from "@ngrx/store";
-import { Character } from "../../../../shared/interfaces/character.interface";
-import { selectCharacter } from "../../../../shared/store/api.selectors";
-import { ActivatedRoute } from "@angular/router";
-import { doSearchCharacterRequest } from "../../../../shared/store/api.actions";
-import { SearchedEntities } from "../../../../shared/enums/searched.entities";
-import { BaseUrl } from "../../../../shared/enums/base.url";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Character } from '../../../../shared/interfaces/character.interface';
+import { selectInfoCharacter } from '../../../../shared/store/api.selectors';
+import { ActivatedRoute } from '@angular/router';
+import { doSearchCharacterRequest } from '../../../../shared/store/api.actions';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { BreadcrumbService } from '../../../../services/breadcrumb/breadcrumb.service';
+import { MenuItem } from 'primeng/api';
+import { BaseUrl } from '../../../../shared/enums/base.url';
+import { SearchedEntities } from '../../../../shared/enums/searched.entities';
 
 @Component({
   selector: 'app-info-character-page',
@@ -14,40 +18,52 @@ import { BaseUrl } from "../../../../shared/enums/base.url";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class InfoCharacterPageComponent implements OnInit {
+export class InfoCharacterPageComponent implements OnInit, OnDestroy {
 
-  public items = [
-    {label: `${BaseUrl.MAIN}`, url: `${BaseUrl.BASE_URL}`},
-    {label: `${BaseUrl.DETAILS}`},
-    {label: `${SearchedEntities.CHARACTERS}`},
-  ];
+  public character: Character | undefined;
 
-  public character: Character | null = null;
+  private destroySubject$: Subject<void> = new Subject<void>();
 
   constructor(
     private store$: Store,
     private activateRoute: ActivatedRoute,
-    private detectChange: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
+    private breadcrumbService: BreadcrumbService,
   ) {
   }
 
-  ngOnInit(): void {
-    let id: number = Number(this.activateRoute.snapshot.params['id']);
+  public ngOnInit(): void {
+    const id: number = Number(this.activateRoute.snapshot.params['id']);
+    this.selectCharacter(id);
+  }
 
-    this.store$.select(selectCharacter(id)).subscribe((item: Character | undefined) => {
-      if (item) {
-        this.character = item;
-      } else {
-        this.store$.dispatch(doSearchCharacterRequest({id: id}));
-        if (item) {
-          this.character = item;
-        }
-      }
-      if (this.character?.name) {
-        this.items.push({label: this.character?.name});
-      }
-      this.detectChange.detectChanges();
-    });
+  public ngOnDestroy(): void {
+    this.destroySubject$.next();
+    this.destroySubject$.complete();
+  }
+
+  private selectCharacter(id: number): void {
+    this.store$.select(selectInfoCharacter)
+      .pipe(
+        tap((character: Character | undefined) => {
+          if(!character) {
+            this.store$.dispatch(doSearchCharacterRequest({id}));
+          }
+        }),
+        filter((character: Character | undefined) => !!character),
+        takeUntil(this.destroySubject$),
+      )
+      .subscribe((character: Character | undefined) => {
+        this.character = character;
+        const breadcrumbs: MenuItem[] = [
+          { label: `${BaseUrl.MAIN}`, routerLink: `/` },
+          { label: `${BaseUrl.DETAILS}` },
+          { label: `${SearchedEntities.CHARACTERS}` },
+          { label: `${character?.name}` },
+        ];
+        this.breadcrumbService.setBreadcrumbs(breadcrumbs);
+        this.cdr.markForCheck();
+      });
   }
 }
 

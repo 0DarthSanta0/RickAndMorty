@@ -1,0 +1,19 @@
+<form [formGroup]="form">
+  <div>
+    <app-input formControlName="input" [errorsMap]="{required: 'Please write something'}" placeholder="input" label="input"></app-input>
+  </div>
+  <div>
+    <app-password-input formControlName="password" [errorsMap]="{required: 'Please write something'}" placeholder="password" label="password"></app-password-input>
+  </div>
+  <div>
+    <app-dropdown formControlName="dropdown" placeholder="select" label="select" [options]="['sss', 'ddd']"></app-dropdown>
+  </div>
+  <div>
+    <app-checkbox formControlName="checkbox" label="1" value="1" name="name" [(ngModel)]="testingCheckbox" ></app-checkbox>
+    <app-checkbox formControlName="checkbox" label="2" value="2" name="name" [(ngModel)]="testingCheckbox" ></app-checkbox>
+  </div>
+  <div>
+    <app-radiobutton  formControlName="radiobutton" label="2" value="2" name="q" [(ngModel)]="testingRadioButton"></app-radiobutton>
+    <app-radiobutton  formControlName="radiobutton" label="3" value="3" name="q" [(ngModel)]="testingRadioButton"></app-radiobutton>
+  </div>
+</form>

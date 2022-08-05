@@ -1,4 +1,4 @@
-import { SearchedEntities } from "../enums/searched.entities";
+import { SearchedEntities } from '../enums/searched.entities';
 
 export const SEARCHED_ENTITIES_CONFIG = {
   [SearchedEntities.CHARACTERS] : { label: 'Characters', value: 'ch' },

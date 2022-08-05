@@ -1,4 +1,4 @@
-import { BaseEssence } from "./base.essence";
+import { BaseEssence } from "./base.essence.interface";
 
 export interface Episode extends BaseEssence{
   air_date: string | null;

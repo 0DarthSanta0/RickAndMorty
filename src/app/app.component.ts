@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { HttpService } from "./services/http/http.service";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +6,4 @@ import { HttpService } from "./services/http/http.service";
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'RickAndMorty';
-
-}
+export class AppComponent { }
